@@ -1,0 +1,47 @@
+{
+  "name": "server",
+  "version": "1.0.0",
+  "description": "Pal-Engke",
+  "main": "index.js",
+  "scripts": {
+    "test": "npm test",
+    "start": "nodemon index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/LeiCodesGit/Pal-Engke.git"
+  },
+  "keywords": [
+    "AI",
+    "meal-planner",
+    "palengke",
+    "nutrition",
+    "food-security",
+    "healthy-eating",
+    "local-vendors",
+    "recipes",
+    "shopping-list",
+    "students",
+    "families"
+  ],
+  "author": "Leah Rouse L. Cruzo, Andrea Luisa S. Tan, Kurt Adrian G. Luzoraga",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/LeiCodesGit/Pal-Engke/issues"
+  },
+  "homepage": "https://github.com/LeiCodesGit/Pal-Engke#readme",
+  "dependencies": {
+    "axios": "^1.10.0",
+    "bcrypt": "^6.0.0",
+    "connect-mongo": "^5.1.0",
+    "cors": "^2.8.5",
+    "dotenv": "^17.0.1",
+    "ejs": "^3.1.10",
+    "express": "^5.1.0",
+    "express-session": "^1.18.1",
+    "mongoose": "^8.16.1"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.10"
+  }
+}

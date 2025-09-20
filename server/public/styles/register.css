@@ -10,7 +10,7 @@
     --text-color: #333;
 }
 
-.login-bg {
+.register-bg {
     background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
     background-size: 400% 400%;
     animation: gradientAnimation 15s ease infinite;
@@ -26,21 +26,4 @@
     100% {
         background-position: 0% 50%;
     }
-}
-
-.label {
-    color: var(--primary-color);
-}
-
-.btn-submit {
-    background-color: var(--primary-color);
-    color: var(--secondary-color);
-    font-weight: bold;
-    border: none;
-    transition: background-color 0.3s ease, transform 0.2s ease;
-}
-
-.btn-submit:hover {
-    background-color: var(--light-primary-color);
-    transform: scale(1.05);
 }

@@ -1,6 +1,7 @@
 
-import bycrypt from "bycrpt";
+import bcrypt from "bcrypt";
 import express from "express";
+import User from "../../models/User.js";
 
 const authRouter = express.Router();
 
@@ -32,7 +33,7 @@ authRouter.post("/register", async (req, res) => {
             return res.status(409).json({message: "Email already exist"});
         }
 
-        const hashedPassword = await bycrypt.hash(password, 7);
+        const hashedPassword = await bcrypt.hash(password, 10);
 
         const newUser = await User.create({
             userType,
@@ -47,7 +48,7 @@ authRouter.post("/register", async (req, res) => {
         //check new generated user:
         console.log("new user _id:")
         res.status(201).json({
-            message: "User created sucessfully",
+            message: "User created successfully",
             userId: newUser._id
         });
     }
@@ -58,8 +59,6 @@ authRouter.post("/register", async (req, res) => {
             error: error.message
         });
     }
-            
-
-}
+});
 
 export default authRouter;

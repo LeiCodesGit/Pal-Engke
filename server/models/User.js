@@ -1,4 +1,3 @@
-// server/models/user.js
 import { Schema, model } from "mongoose";
 
 // Create the schema

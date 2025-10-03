@@ -1,37 +1,27 @@
-document.addEventListener("DOMContentLoaded", () => {
-    const loginForm = document.querySelector("form");
+const loginForm = document.getElementById("login-form");
 
-    loginForm.addEventListener("submit", async (event) => {
-        event.preventDefault();
+loginForm.addEventListener("submit", async (e) => {
+    e.preventDefault();
 
-        const email = document.getElementById("email-input").value.trim();
-        const password = document.getElementById("password-input").value;
+    const email = document.getElementById("email-input").value;
+    const password = document.getElementById("password-input").value;
 
-        if (!email || !password) {
-            alert("Please enter both email and password.");
-            return;
-        }
+    try {
+        const response = await axios.post("/auth/login", { email, password });
 
-        try {
-            const response = await axios.post("/auth/login", {
-                email,
-                password,
-            });
+        if (response.data.user) {
+            const userType = response.data.user.userType;
 
-            const user = response.data.user;
-
-            alert("Login successful!");
-
-            // Redirect based on user type
-            if (user.userType === "admin") {
-                window.location.href = "/admin/adminmenu";
-            } else {
+            if (userType === "admin") {
+                window.location.href = "/admin/dashboard";
+            } else {  
                 window.location.href = "/home";
             }
-        } catch (error) {
-            const message = error.response?.data?.message || "Login failed";
-            alert(message);
-            console.error("Login error:", message);
+        } else {
+            alert(response.data.message || "Login failed");
         }
-    });
+    } catch (error) {
+        console.error(error);
+        alert("Something went wrong. Please try again.");
+    }
 });

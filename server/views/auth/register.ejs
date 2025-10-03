@@ -21,50 +21,95 @@
             <h2 class="mb-1">Create your</h2>
             <h1 class="fw-bold label">Pal-Engke Account</h1>
         </div>
-        
-        <form action="/auth/register" method="POST">
+
+        <form id="register-form">
+
+            <!-- First Name -->
             <div class="mb-3">
-                <label for="name-input" class="form-label">Full Name</label>
+                <label for="firstName" class="form-label">First Name</label>
                 <input 
                     type="text" 
                     class="form-control" 
-                    id="name-input" 
-                    name="name"
-                    placeholder="Juan Dela Cruz"
+                    id="firstName" 
+                    name="firstName"
+                    placeholder="Juan"
                     required
                 >
             </div>
 
+            <!-- Last Name -->
             <div class="mb-3">
-                <label for="email-input" class="form-label">Email address</label>
+                <label for="lastName" class="form-label">Last Name</label>
+                <input 
+                    type="text" 
+                    class="form-control" 
+                    id="lastName" 
+                    name="lastName"
+                    placeholder="Dela Cruz"
+                    required
+                >
+            </div>
+
+            <!-- Email -->
+            <div class="mb-3">
+                <label for="email" class="form-label">Email address</label>
                 <input 
                     type="email" 
                     class="form-control" 
-                    id="email-input" 
+                    id="email" 
                     name="email"
                     placeholder="name@example.com"
                     required
                 >
             </div>
 
+            <!-- Contact Number -->
             <div class="mb-3">
-                <label for="password-input" class="form-label">Password</label>
+                <label for="contactNumber" class="form-label">Contact Number</label>
+                <input 
+                    type="text" 
+                    class="form-control" 
+                    id="contactNumber" 
+                    name="contactNumber"
+                    placeholder="09123456789"
+                    required
+                >
+            </div>
+
+            <!-- Age -->
+            <div class="mb-3">
+                <label for="age" class="form-label">Age</label>
+                <input 
+                    type="number" 
+                    class="form-control" 
+                    id="age" 
+                    name="age"
+                    placeholder="18"
+                    required
+                    min="0"
+                >
+            </div>
+
+            <!-- Password -->
+            <div class="mb-3">
+                <label for="password" class="form-label">Password</label>
                 <input 
                     type="password" 
                     class="form-control" 
-                    id="password-input" 
+                    id="password" 
                     name="password"
                     placeholder="Enter password"
                     required
                 >
             </div>
 
+            <!-- Confirm Password -->
             <div class="mb-3">
-                <label for="confirm-password-input" class="form-label">Confirm Password</label>
+                <label for="confirmPassword" class="form-label">Confirm Password</label>
                 <input 
                     type="password" 
                     class="form-control" 
-                    id="confirm-password-input" 
+                    id="confirmPassword" 
                     name="confirmPassword"
                     placeholder="Re-enter password"
                     required

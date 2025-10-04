@@ -15,7 +15,8 @@ loginForm.addEventListener("submit", async (e) => {
             if (userType === "admin") {
                 window.location.href = "/admin/dashboard";
             } else {  
-                window.location.href = "/home";
+                alert("Login successful!");
+                //window.location.href = "/home";
             }
         } else {
             alert(response.data.message || "Login failed");

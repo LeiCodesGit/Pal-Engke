@@ -30,7 +30,7 @@ authRouter.post("/register", async (req, res) => {
     try {
         const existingUser = await User.findOne({email});
         if (existingUser) {
-            return res.status(409).json({message: "Email already exist"});
+            return res.status(409).json({message: "Email already exists"});
         }
 
         const hashedPassword = await bcrypt.hash(password, 10);
@@ -44,13 +44,6 @@ authRouter.post("/register", async (req, res) => {
             password: hashedPassword,
             age
         });
-
-        //check new generated user:
-        console.log("new user _id:")
-        res.status(201).json({
-            message: "User created successfully",
-            userId: newUser._id
-        });
     }
     catch (error) {
         console.error("Registration error:", error);
@@ -59,6 +52,60 @@ authRouter.post("/register", async (req, res) => {
             error: error.message
         });
     }
+
 });
+
+//User login
+authRouter.post("/login", async (req, res) => {
+    const { email, password } = req.body;
+
+    try {
+        const user = await User.findOne({ email });
+        if (!user) {
+        return res.status(401).render("auth/login", { error: "Invalid email or password" });
+        }
+
+        const isMatch = await bcrypt.compare(password, user.password);
+        if (!isMatch) {
+        return res.status(401).render("auth/login", { error: "Invalid email or password" });
+        }
+
+        // Store user in session
+        req.session.user = {
+        id: user._id,
+        name: user.firstName,
+        email: user.email,
+        userType: user.userType,
+        };
+
+
+        //❗Remove this if the homepage is ready❗
+        console.log("User logged in:", req.session.user);
+        res.status(200).json({
+            message: "Login successful",
+            user: req.session.user
+        });
+
+        // Redirect to homepage (un-comment when homepage is ready)
+        //res.redirect("/");
+    } catch (error) {
+        console.error("Login error:", error);
+        res.status(500).render("auth/login", { error: "Server error" });
+    }
+});
+
+//User logout
+authRouter.post("/logout", (req, res) => {
+    req.session.destroy((err) => {
+        if (err) {
+        console.error("Logout error:", err);
+        return res.status(500).json({ message: "Logout failed" });
+        }
+
+        res.clearCookie("connect.sid"); // clear session cookie
+        res.redirect("/auth/login");
+    });
+});
+
 
 export default authRouter;

@@ -8,7 +8,7 @@ export default function connect() {
 
     mongoose
     .connect(database, {
-        dbName: "sals-brews",
+        dbName: "Pal-Engke",
     })
     
     .then(() => {

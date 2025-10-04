@@ -1,6 +1,8 @@
 import express from "express";
 import path from "path";
 import { fileURLToPath } from 'url';
+import connect from "./mongodb-connect.js";  
+import session from "express-session";
 
 import authRouter from "./routes/auth/routes.js";
 const app = express();
@@ -8,6 +10,23 @@ const port = process.env.PORT || 4000;
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
+
+connect(); //connect to database
+
+app.use(express.json());
+
+app.use(session({
+    secret: process.env.SESSION_SECRET,
+    resave: false,
+    saveUninitialized: true,
+    cookie: {
+        secure: false,          // set to true only if using HTTPS
+        maxAge: 1000 * 60 * 60 // 1 hour
+    }
+}));
+
+
+app.use(express.urlencoded({ extended: true }));
 
 //set view engine to EJS
 app.set("view engine", "ejs");

@@ -78,16 +78,8 @@ authRouter.post("/login", async (req, res) => {
         userType: user.userType,
         };
 
-
-        //❗Remove this if the homepage is ready❗
-        console.log("User logged in:", req.session.user);
-        res.status(200).json({
-            message: "Login successful",
-            user: req.session.user
-        });
-
         // Redirect to homepage (un-comment when homepage is ready)
-        //res.redirect("/");
+    res.redirect("/");
     } catch (error) {
         console.error("Login error:", error);
         res.status(500).render("auth/login", { error: "Server error" });
@@ -105,16 +97,6 @@ authRouter.post("/logout", (req, res) => {
         res.clearCookie("connect.sid"); // clear session cookie
         res.redirect("/auth/login");
     });
-});
-
-// Palengke page
-userRouter.get("/palengke", (req, res) => {
-    res.render("users/palengke");
-});
-
-// Community page
-userRouter.get("/community", (req, res) => {
-    res.render("users/community");
 });
 
 export default authRouter;

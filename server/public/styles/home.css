@@ -1,0 +1,102 @@
+body {
+  margin: 0;
+  font-family: "Segoe UI", Arial, sans-serif;
+  background: #fcefb4;
+  color: #333;
+}
+
+.dashboard-container {
+  max-width: 1000px;
+  margin: auto;
+  padding: 2rem;
+}
+
+/* Greeting */
+.greeting h1 {
+  font-size: 2rem;
+  margin-bottom: 0.3rem;
+}
+
+.greeting p {
+  color: #666;
+  margin-bottom: 2rem;
+}
+
+/* Budget Card */
+.budget-card {
+  background: #acd8a7;
+  padding: 1.5rem;
+  border-radius: 12px;
+  margin-bottom: 2rem;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
+
+.budget-card h2 {
+  margin-bottom: 0.5rem;
+}
+
+.budget-amount {
+  font-size: 1.3rem;
+  font-weight: bold;
+}
+
+.saved {
+  color: green;
+  font-size: 1rem;
+  margin-left: 0.5rem;
+}
+
+.remaining {
+  margin-top: 0.3rem;
+  color: #444;
+}
+
+/* Meals */
+.meals h2 {
+  margin-bottom: 1rem;
+}
+
+.meal-card {
+  display: flex;
+  gap: 1rem;
+  background: #fff;
+  padding: 1rem;
+  margin-bottom: 1rem;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+  align-items: center;
+}
+
+.meal-card img {
+  width: 200px;
+  height: 130px;
+  object-fit: cover;
+  border-radius: 10px;
+}
+
+.meal-info h3 {
+  margin: 0 0 0.3rem;
+}
+
+.meal-info p {
+  margin: 0 0 0.3rem;
+  color: #666;
+}
+
+.meal-info small {
+  color: #888;
+}
+
+/* Markets */
+.markets h2 {
+  margin: 2rem 0 1rem;
+}
+
+.market-card {
+  background: #e3f2fd;
+  padding: 1rem;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
+
+

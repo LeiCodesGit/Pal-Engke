@@ -1,0 +1,37 @@
+<style>
+  /* Bottom Nav */
+  .bottom-nav {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background: #fff;
+    border-top: 1px solid #ddd;
+    display: flex;
+    justify-content: space-around;
+    padding: 0.8rem 0;
+    z-index: 100;
+  }
+
+  .bottom-nav a {
+    text-decoration: none;
+    color: #666;
+    font-size: 1rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .bottom-nav a.active {
+    color: #007bff;
+    font-weight: bold;
+  }
+</style>
+
+<nav class="bottom-nav">
+  <a href="/" class="<%= activePage === 'home' ? 'active' : '' %>">🏠 Home</a>
+  <a href="/meals" class="<%= activePage === 'meals' ? 'active' : '' %>">🍽️ Meals</a>
+  <a href="/palengke" class="<%= activePage === 'palengke' ? 'active' : '' %>">🛒 Palengke</a>
+  <a href="/community" class="<%= activePage === 'community' ? 'active' : '' %>">👥 Community</a>
+  <a href="/profile" class="<%= activePage === 'profile' ? 'active' : '' %>">👤 Profile</a>
+</nav>

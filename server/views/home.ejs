@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pal-Engke | Home</title>
+    <link rel="icon" type="image/png" href="/images/robot-logo.ico">
+    <link rel="stylesheet" href="/styles/home.css">
+</head>
+
+<body>
+  <div class="dashboard-container">
+
+    <!-- Greeting -->
+    <header class="greeting">
+      <h1>Good Morning, Maria! 👋🏽</h1>
+      <p>Here’s your personalized plan for today</p>
+    </header>
+
+    <!-- Budget Card -->
+    <section class="budget-card">
+      <h2>Weekly Budget</h2>
+      <p class="budget-amount">₱850 <span class="saved">₱150 saved this week</span></p>
+      <p class="remaining">Remaining: ₱425</p>
+    </section>
+
+    <!-- Meals Section -->
+    <section class="meals">
+      <h2>Today’s Meal Ideas</h2>
+
+      <div class="meal-card">
+        <img src="https://www.foxyfolksy.com/wp-content/uploads/2017/06/pork-adobo-640.jpg" alt="Pork Adobo">
+        <div class="meal-info">
+          <h3>Pork Adobo</h3>
+          <p>Using ingredients you already have</p>
+          <small>₱50 / serving · 30 min</small>
+        </div>
+      </div>
+
+      <div class="meal-card">
+        <img src="https://www.forkinthekitchen.com/wp-content/uploads/2017/11/220113.noodle.stir_.fry-0405.jpg" alt="Vegetable Stir Fry">
+        <div class="meal-info">
+          <h3>Vegetable Stir Fry</h3>
+          <p>Quick and healthy option</p>
+          <small>₱30 / serving · 15 min</small>
+        </div>
+      </div>
+    </section>
+
+    <!-- Nearby Markets -->
+    <section class="markets">
+      <h2>Nearby Markets</h2>
+      <div class="market-card">
+        <h3>Savemore SuperMarket Bangkal</h3>
+        <p>⭐ 4.8 rating · Open until 7PM</p>
+      </div>
+    </section>
+  </div>
+
+<%- include('partials/navbar', { activePage: 'home' }) %>
+</body>
+
+<script src="/scripts/home.js"></script>
+
+</html>

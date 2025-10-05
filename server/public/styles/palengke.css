@@ -1,0 +1,76 @@
+:root {
+  --primary-color: #f3ca52;
+  --secondary-color: #02472e;
+  --light-bg: #f9f9f9;
+  --purple: #9b59b6;
+}
+
+body {
+  background-color: var(--light-bg);
+  font-family: 'Segoe UI', sans-serif;
+}
+
+.search-bar {
+  border-radius: 25px;
+  padding: 10px;
+}
+
+.btn-filter {
+  border-radius: 20px;
+  background-color: #eee;
+  padding: 5px 15px;
+  font-size: 14px;
+}
+
+.btn-filter.active {
+  background-color: var(--secondary-color);
+  color: white;
+}
+
+.map-placeholder {
+  background: #f0f0f0;
+  height: 180px;
+  border-radius: 15px;
+}
+
+.market-card {
+  background: white;
+}
+
+.badge.bg-purple {
+  background-color: var(--purple);
+  color: white;
+}
+
+.btn-view {
+  background-color: var(--secondary-color);
+  color: white;
+}
+
+.btn-call {
+  background-color: var(--primary-color);
+  color: var(--secondary-color);
+}
+
+.bottom-nav {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: white;
+  display: flex;
+  justify-content: space-around;
+  padding: 10px 0;
+  border-top: 1px solid #ccc;
+}
+
+.bottom-nav .nav-link {
+  color: #555;
+  text-decoration: none;
+  font-size: 14px;
+}
+
+.bottom-nav .nav-link.active {
+  color: var(--secondary-color);
+  font-weight: bold;
+}

@@ -107,5 +107,14 @@ authRouter.post("/logout", (req, res) => {
     });
 });
 
+// Palengke page
+userRouter.get("/palengke", (req, res) => {
+    res.render("users/palengke");
+});
+
+// Community page
+userRouter.get("/community", (req, res) => {
+    res.render("users/community");
+});
 
 export default authRouter;

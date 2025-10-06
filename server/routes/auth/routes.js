@@ -72,22 +72,29 @@ authRouter.post("/login", async (req, res) => {
 
         // Store user in session
         req.session.user = {
-        id: user._id,
-        name: user.firstName,
-        email: user.email,
-        userType: user.userType,
+            id: user._id,
+            firstName: user.firstName,
+            lastName: user.lastName,
+            email: user.email,
+            contactNumber: user.contactNumber,
+            age: user.age,
+            userType: user.userType
         };
 
-
-        //❗Remove this if the homepage is ready❗
-        console.log("User logged in:", req.session.user);
+        //send user data as JSON
         res.status(200).json({
             message: "Login successful",
-            user: req.session.user
+            user: {
+                id: user._id,
+                firstName: user.firstName,
+                lastName: user.lastName,
+                email: user.email,
+                contactNumber: user.contactNumber,
+                age: user.age,
+                userType: user.userType
+            }
         });
 
-        // Redirect to homepage (un-comment when homepage is ready)
-        //res.redirect("/");
     } catch (error) {
         console.error("Login error:", error);
         res.status(500).render("auth/login", { error: "Server error" });
@@ -106,6 +113,5 @@ authRouter.post("/logout", (req, res) => {
         res.redirect("/auth/login");
     });
 });
-
 
 export default authRouter;

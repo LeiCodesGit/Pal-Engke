@@ -5,6 +5,8 @@ import connect from "./mongodb-connect.js";
 import session from "express-session";
 
 import authRouter from "./routes/auth/routes.js";
+import homeRouter from "./routes/homeroutes.js"
+
 const app = express();
 const port = process.env.PORT || 4000;  
 
@@ -37,6 +39,7 @@ app.use(express.static("public"));
 
 //routes:
 app.use("/auth", authRouter);
+app.use("/", homeRouter)
 
 app.get("/", (req, res) => {
     res.redirect("/auth/login");

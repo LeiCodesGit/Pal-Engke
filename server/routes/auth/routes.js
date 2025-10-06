@@ -72,14 +72,29 @@ authRouter.post("/login", async (req, res) => {
 
         // Store user in session
         req.session.user = {
-        id: user._id,
-        name: user.firstName,
-        email: user.email,
-        userType: user.userType,
+            id: user._id,
+            firstName: user.firstName,
+            lastName: user.lastName,
+            email: user.email,
+            contactNumber: user.contactNumber,
+            age: user.age,
+            userType: user.userType
         };
 
-        // Redirect to homepage (un-comment when homepage is ready)
-    res.redirect("/");
+        //send user data as JSON
+        res.status(200).json({
+            message: "Login successful",
+            user: {
+                id: user._id,
+                firstName: user.firstName,
+                lastName: user.lastName,
+                email: user.email,
+                contactNumber: user.contactNumber,
+                age: user.age,
+                userType: user.userType
+            }
+        });
+
     } catch (error) {
         console.error("Login error:", error);
         res.status(500).render("auth/login", { error: "Server error" });

@@ -13,9 +13,11 @@
 
     <!-- Greeting -->
     <header class="greeting">
-      <h1>Good Morning, Maria! 👋🏽</h1>
+      <h1>
+        Good Morning, <%= user ? user.firstName : "Guest" %>! 👋🏽
+      </h1>     
       <p>Here’s your personalized plan for today</p>
-    </header>
+    </header> 
 
     <!-- Budget Card -->
     <section class="budget-card">

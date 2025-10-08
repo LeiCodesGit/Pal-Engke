@@ -1,0 +1,141 @@
+:root{
+  --bg: #fcefb4;       /* page background from your guide */
+  --primary: #f3ca52;  /* accent */
+  --secondary: #02472e;/* accent */
+  --market-blue: #e3f2fd;/* market card bg used in home.css */
+  --active: #007bff;   /* tab active color (used in meals.css) */
+}
+
+/* ensure full-page background uses guide color */
+html, body {
+  height: 100%;
+  margin: 0;
+  font-family: "Segoe UI", Arial, sans-serif;
+  background: var(--bg);
+  color: #333;
+  padding-bottom: 70px; /* room for navbar partial */
+}
+
+/* ...explicit class in case body class is used */
+.palengke-bg { background: var(--bg); }
+
+/* container matches home/meals */
+.palengke-container {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 1.5rem;
+}
+
+/* header */
+.page-header {
+  text-align: center;
+  margin-bottom: 1rem;
+}
+.page-header h3 {
+  font-size: 1.8rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+}
+
+/* search */
+.search-wrap { max-width: 700px; margin: 0.3rem auto 0; }
+.search-bar {
+  width: 100%;
+  border: none;
+  border-radius: 10px;
+  padding: 0.6rem 1rem;
+  font-size: 1rem;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+}
+
+/* centered filters */
+.filters {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.5rem;
+  margin: 1rem 0 1.5rem;
+}
+
+.btn-filter {
+  border: none;
+  background: #f0f0f0;
+  padding: 0.6rem 1rem;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 0.95rem;
+  color: #555;
+  transition: all 0.15s ease;
+}
+
+.btn-filter.active {
+  background: var(--active);
+  color: #fff;
+  font-weight: bold;
+}
+
+/* map placeholder — responsive and editable */
+.map-placeholder {
+  max-width: 1000px;
+  margin: 0 auto 2rem;
+  background: #fff; /* map card is white like meals.recipe-card */
+  height: 300px;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+  text-align: center;
+  padding: 1rem;
+  color: #555;
+}
+
+/* if you add an image or iframe inside #map-container they will fill properly */
+#map-container img,
+#map-container iframe { width: 100%; height: 100%; object-fit: cover; border: 0; }
+
+/* markets list — cards centered like home/meals */
+.markets {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  padding-bottom: 1.5rem;
+}
+
+.market-card {
+  background: var(--market-blue); /* matches home.css market card color */
+  border-radius: 12px;
+  padding: 1rem;
+  width: 100%;
+  max-width: 650px;  /* center width similar to meals cards */
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
+
+.market-card h5 { margin: 0 0 0.3rem; }
+.market-card p { margin: 0.2rem 0; color: #666; }
+
+.badge { font-size: 0.8rem; margin-right: 0.3rem; }
+.purple { background: #9b59b6; color: #fff; padding: 0.2rem 0.45rem; border-radius: 6px; }
+
+/* actions */
+.rating { color: #ffb300; font-weight: bold; }
+
+.btn-view, .btn-call {
+  border: none;
+  border-radius: 8px;
+  padding: 0.4rem 0.8rem;
+  cursor: pointer;
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+.btn-view { background: var(--secondary); color: #fff; }
+.btn-call { background: var(--primary); color: var(--secondary); }
+
+/* responsive tweaks */
+@media (max-width: 480px) {
+  .search-wrap { max-width: 100%; padding: 0 0.5rem; }
+  .market-card { padding: 0.9rem; }
+}

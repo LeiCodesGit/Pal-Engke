@@ -1,0 +1,125 @@
+:root{
+  --bg: #fcefb4;
+  --primary: #f3ca52;
+  --secondary: #02472e;
+  --active: #007bff;
+}
+
+/* page background */
+html, body {
+  height: 100%;
+  margin: 0;
+  font-family: 'Poppins', sans-serif;
+  background: var(--bg);
+  color: #333;
+  padding-bottom: 70px; /* room for navbar partial */
+}
+.community-bg { background: var(--bg); }
+
+/* main container */
+.community-container {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 1.5rem;
+}
+
+/* header: space-between on wide screens, stacked on small */
+.community-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+.community-header h3 { font-size: 1.8rem; font-weight: 600; margin: 0; }
+
+/* share button */
+.btn-share {
+  background: var(--primary);
+  color: var(--secondary);
+  border: none;
+  border-radius: 8px;
+  padding: 0.6rem 1rem;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+/* tabs / filters centered */
+.filters {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.5rem;
+  margin: 1rem 0 1.5rem;
+  padding: 0;
+}
+.btn-filter {
+  border: none;
+  background: #f0f0f0;
+  padding: 0.6rem 1rem;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 0.95rem;
+  color: #555;
+}
+.btn-filter.active {
+  background: var(--active);
+  color: #fff;
+  font-weight: bold;
+}
+
+/* recipe cards like meals.css */
+.recipe-card {
+  background: #fff;
+  border-radius: 12px;
+  padding: 1.2rem;
+  margin: 1rem auto;
+  width: 100%;
+  max-width: 650px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
+.recipe-card h5 { margin: 0.3rem 0; font-weight: 600; }
+.recipe-card p { margin: 0.3rem 0; color: #555; }
+.meta { font-size: 0.9rem; color: #777; }
+
+.badge { font-size: 0.8rem; margin-bottom: 0.5rem; }
+
+/* avatar */
+.avatar {
+  background-color: var(--secondary);
+  color: white;
+  font-weight: bold;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* buttons */
+.btn-cost {
+  background: var(--primary);
+  color: var(--secondary);
+  border: none;
+  border-radius: 8px;
+  padding: 0.4rem 0.8rem;
+  font-size: 0.9rem;
+}
+.btn-follow {
+  background: var(--secondary);
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 0.4rem 0.8rem;
+  font-size: 0.9rem;
+}
+
+/* responsive: header stacks on small screens */
+@media (max-width: 600px) {
+  .community-header {
+    flex-direction: column;
+    align-items: center;
+  }
+  .btn-share { margin-top: 0.6rem; }
+}

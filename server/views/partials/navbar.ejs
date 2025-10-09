@@ -1,5 +1,23 @@
+<!-- Include Font Awesome (in your main layout or <head>) -->
+<link
+  rel="stylesheet"
+  href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+/>
+
 <style>
-  /* Bottom Nav */
+  /* Global Styles */
+  body {
+    font-family: 'Poppins', sans-serif;
+    margin: 0;
+    padding: 0;
+  }
+
+  /* Add bottom padding so content isn't hidden behind navbar */
+  main, .page-content {
+    padding-bottom: 70px; /* adjust based on navbar height */
+  }
+
+  /* Bottom Navigation Bar */
   .bottom-nav {
     position: fixed;
     bottom: 0;
@@ -9,29 +27,56 @@
     border-top: 1px solid #ddd;
     display: flex;
     justify-content: space-around;
-    padding: 0.8rem 0;
-    z-index: 100;
+    align-items: center;
+    padding: 0.6rem 0;
+    z-index: 1000;
   }
 
   .bottom-nav a {
     text-decoration: none;
     color: #666;
-    font-size: 1rem;
+    font-size: 0.9rem;
     display: flex;
     flex-direction: column;
     align-items: center;
+    transition: color 0.2s ease-in-out;
+  }
+
+  .bottom-nav a i {
+    font-size: 1.3rem;
+    margin-bottom: 0.2rem;
   }
 
   .bottom-nav a.active {
     color: #007bff;
     font-weight: bold;
   }
+
+  .bottom-nav a:hover {
+    color: #007bff;
+  }
 </style>
 
+<!-- Bottom Navbar -->
 <nav class="bottom-nav">
-  <a href="/" class="<%= activePage === 'home' ? 'active' : '' %>">🏠 Home</a>
-  <a href="/meals" class="<%= activePage === 'meals' ? 'active' : '' %>">🍽️ Meals</a>
-  <a href="/palengke" class="<%= activePage === 'palengke' ? 'active' : '' %>">🛒 Palengke</a>
-  <a href="/community" class="<%= activePage === 'community' ? 'active' : '' %>">👥 Community</a>
-  <a href="/profile" class="<%= activePage === 'profile' ? 'active' : '' %>">👤 Profile</a>
+  <a href="/home" class="<%= activePage === 'home' ? 'active' : '' %>">
+    <i class="fa-solid fa-house"></i>
+    <span>Home</span>
+  </a>
+  <a href="/meals" class="<%= activePage === 'meals' ? 'active' : '' %>">
+    <i class="fa-solid fa-utensils"></i>
+    <span>Meals</span>
+  </a>
+  <a href="/palengke" class="<%= activePage === 'palengke' ? 'active' : '' %>">
+    <i class="fa-solid fa-cart-shopping"></i>
+    <span>Palengke</span>
+  </a>
+  <a href="/community" class="<%= activePage === 'community' ? 'active' : '' %>">
+    <i class="fa-solid fa-users"></i>
+    <span>Community</span>
+  </a>
+  <a href="/profile" class="<%= activePage === 'profile' ? 'active' : '' %>">
+    <i class="fa-solid fa-user"></i>
+    <span>Profile</span>
+  </a>
 </nav>

@@ -16,13 +16,13 @@ loginForm.addEventListener("submit", async (e) => {
                 window.location.href = "/admin/dashboard";
             } else {  
                 alert("Login successful!");
-                //window.location.href = "/home";
+                window.location.href = "/home";
             }
         } else {
             alert(response.data.message || "Login failed");
         }
     } catch (error) {
         console.error(error);
-        alert("Something went wrong. Please try again.");
+        alert("Something went wrong:\n" + error);
     }
 });

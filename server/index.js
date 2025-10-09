@@ -1,12 +1,14 @@
 import express from "express";
 import path from "path";
 import { fileURLToPath } from 'url';
+import dotenv from "dotenv";
+dotenv.config();
 import connect from "./mongodb-connect.js";  
 import session from "express-session";
 
 import authRouter from "./routes/auth/routes.js";
-import homeRouter from "./routes/homeroutes.js"
-
+import homeRouter from "./routes/homeroutes.js";
+import aiRouter from "./routes/airoutes.js";  
 const app = express();
 const port = process.env.PORT || 4000;  
 
@@ -40,6 +42,7 @@ app.use(express.static("public"));
 //routes:
 app.use("/auth", authRouter);
 app.use("/", homeRouter)
+app.use("/api", aiRouter);  
 
 app.get("/", (req, res) => {
     res.redirect("/auth/login");

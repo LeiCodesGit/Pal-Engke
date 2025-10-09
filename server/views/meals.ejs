@@ -2,90 +2,32 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Pal-Engke | Meals</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pal-Engke | Meal Suggestions</title>
   <link rel="icon" type="image/png" href="/images/robot-logo.ico">
   <link rel="stylesheet" href="/styles/meals.css">
 </head>
 <body>
-  <div class="meals-container">
+  <main class="meal-container">
+    <div class="logo-header">
+      <img src="/images/wink-logo.png" alt="Pal-Engke Logo">
+      <h1>Pal-Engke: Meal Suggestions</h1>
+    </div>
 
-    <!-- Header -->
-    <header class="page-header">
-      <h1>Meal Suggestions</h1>
-      <div class="search-bar">
-        <input type="text" placeholder="Search recipes...">
-        <button>🔍</button>
+    <div class="chat-box" id="chatBox">
+      <div class="bot-message">
+        🍽️ Hello! Tell me what ingredients you have, and I’ll suggest a meal.
       </div>
-    </header>
+    </div>
 
-    <!-- Smart Suggestions -->
-    <section class="smart-suggestions">
-      <h2>Smart Suggestions</h2>
-      <p>Based on ingredients you have:</p>
-      <div class="ingredient-tags">
-        <span>Onions</span>
-        <span>Tomatoes</span>
-        <span>Garlic</span>
-        <span>Pork</span>
-      </div>
+    <form id="mealForm" class="input-area">
+      <input type="text" id="ingredients" placeholder="Type your ingredients here..." required>
+      <button type="submit">Send</button>
+    </form>
+  </main>
 
-      <div class="recipe-card">
-        <img src="https://www.foxyfolksy.com/wp-content/uploads/2017/06/pork-adobo-640.jpg" alt="Pork Adobo">
-        <div class="recipe-info">
-          <h3>Pork Adobo</h3>
-          <p>Classic Filipino comfort food using ingredients you already have</p>
-          <div class="recipe-details">
-            <small>⏱️ 30 min</small>
-            <small>👥 4 servings</small>
-            <span class="price">₱50/serving</span>
-          </div>
-        </div>
-      </div>
-    </section>
+  <%- include('partials/navbar', { activePage: 'meals' }) %>
 
-    <!-- Browse by Category -->
-    <section class="browse-category">
-      <h2>Browse by Category</h2>
-      <div class="tabs">
-        <button class="active">All Recipes</button>
-        <button>Quick Meals</button>
-        <button>Budget-Friendly</button>
-      </div>
-
-      <div class="recipe-list">
-        <div class="recipe-card">
-          <img src="https://www.iankewks.com/wp-content/uploads/2024/05/IMG_0323.jpg" alt="Pinakbet">
-          <div class="recipe-info">
-            <h3>Pinakbet</h3>
-            <p>Traditional vegetable stew with shrimp paste</p>
-            <div class="recipe-details">
-              <small>⏱️ 25 min</small>
-              <small>⭐ 4.7</small>
-              <span class="price">₱35/serving</span>
-            </div>
-          </div>
-        </div>
-
-        <div class="recipe-card">
-          <img src="https://cdn.shortpixel.ai/spai2/q_glossy+ret_img+to_auto/www.hungryhuy.com/wp-content/uploads/chicken-tinola-sq.jpg" alt="Chicken Tinola">
-          <div class="recipe-info">
-            <h3>Chicken Tinola</h3>
-            <p>Healthy ginger-based soup with green papaya</p>
-            <div class="recipe-details">
-              <small>⏱️ 40 min</small>
-              <small>⭐ 4.5</small>
-              <span class="price">₱45/serving</span>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-  </div>
-
-   <%- include('partials/navbar', { activePage: 'meals' }) %>
-
+  <script src="/scripts/meals.js"></script>
 </body>
-
-<script src="/scripts/meals.js"></script>
-
 </html>

@@ -1,67 +1,165 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pal-Engke | Home</title>
-    <link rel="icon" type="image/png" href="/images/robot-logo.ico">
-    <link rel="stylesheet" href="/styles/home.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Pal-Engke | Home</title>
+  <link rel="icon" type="image/png" href="/images/robot-logo.ico" />
+  <link rel="stylesheet" href="/styles/home.css" />
+
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
 </head>
 
 <body>
   <div class="dashboard-container">
-
     <!-- Greeting -->
     <header class="greeting">
-      <h1>
-        Good Morning, <%= user ? user.firstName : "Guest" %>! 👋🏽
-      </h1>     
-      <p>Here’s your personalized plan for today</p>
-    </header> 
+      <div class="header-logo">
+        <img src="/images/wink-logo.png" alt="Pal-Engke Logo" />
+      </div>
+      <div class="greeting-text">
+        <h1>Good Evening, <%= user ? user.firstName : "Guest" %>!</h1>
+        <p>Here’s your personalized plan for today</p>
+      </div>
+    </header>
 
     <!-- Budget Card -->
-    <section class="budget-card">
-      <h2>Weekly Budget</h2>
-      <p class="budget-amount">₱850 <span class="saved">₱150 saved this week</span></p>
-      <p class="remaining">Remaining: ₱425</p>
+    <section class="budget-card" id="budgetCard" aria-label="Weekly budget">
+      <div class="budget-header">
+        <i data-lucide="wallet" class="icon" aria-hidden="true"></i>
+        <div>
+          <h2>Weekly Budget</h2>
+          <p class="budget-amount">₱<span id="budgetValue">0</span> <span class="saved" id="savedText"></span></p>
+          <p class="remaining">Remaining: ₱<span id="remainingValue">0</span></p>
+        </div>
+      </div>
     </section>
 
-    <!-- Meals Section -->
-    <section class="meals">
-      <h2>Today’s Meal Ideas</h2>
+    <!-- Budget Modal -->
+    <div id="budgetModal" class="modal" role="dialog" aria-modal="true" aria-hidden="true">
+      <div class="modal-content" role="document">
+        <button class="close-btn" aria-label="Close budget modal">&times;</button>
+        <h2>Set Your Weekly Budget</h2>
+        <form id="budgetForm">
+          <label for="weeklyBudget">Weekly Budget (₱):</label>
+          <input type="number" id="weeklyBudget" placeholder="Enter amount" required />
+          <label for="savingsGoal">Savings Goal (optional):</label>
+          <input type="number" id="savingsGoal" placeholder="Enter goal" />
+          <button type="submit" class="save-btn">Save Budget</button>
+        </form>
+      </div>
+    </div>
 
-      <div class="meal-card">
-        <img src="https://www.foxyfolksy.com/wp-content/uploads/2017/06/pork-adobo-640.jpg" alt="Pork Adobo">
+    <!-- Meals -->
+    <section class="meals">
+      <h2><i data-lucide="utensils-crossed" class="section-icon"></i> Today’s Meal Ideas</h2>
+
+      <div class="meal-card"
+           data-meal="Pork Adobo"
+           data-desc="A savory Filipino dish made with soy sauce, vinegar, and garlic."
+           data-ingredients='["1 kg pork belly","1/2 cup soy sauce","1/3 cup vinegar","4 cloves garlic","2 bay leaves","1 tsp peppercorns","1 tbsp sugar"]'
+           data-steps='["Combine pork, soy sauce, and garlic. Marinate for 30 mins.","Simmer with vinegar, bay leaves, and pepper.","Cook until tender and sauce is reduced."]'
+           data-cost="₱50 / serving · 30 min"
+           data-img="https://www.foxyfolksy.com/wp-content/uploads/2017/06/pork-adobo-640.jpg"
+           tabindex="0"
+           role="button"
+      >
+        <img src="https://www.foxyfolksy.com/wp-content/uploads/2017/06/pork-adobo-640.jpg" alt="Pork Adobo" />
         <div class="meal-info">
           <h3>Pork Adobo</h3>
-          <p>Using ingredients you already have</p>
+          <p>Classic Filipino favorite</p>
           <small>₱50 / serving · 30 min</small>
         </div>
       </div>
 
-      <div class="meal-card">
-        <img src="https://www.forkinthekitchen.com/wp-content/uploads/2017/11/220113.noodle.stir_.fry-0405.jpg" alt="Vegetable Stir Fry">
+      <div class="meal-card"
+           data-meal="Vegetable Stir Fry"
+           data-desc="A quick, healthy stir-fry with garlic sauce."
+           data-ingredients='["Mixed vegetables","2 cloves garlic","1 tbsp soy sauce","1 tsp sesame oil","1 tbsp oyster sauce","Salt and pepper to taste"]'
+           data-steps='["Sauté garlic until fragrant.","Add vegetables and stir-fry for 3–5 minutes.","Add sauces and cook for another 2 minutes."]'
+           data-cost="₱30 / serving · 15 min"
+           data-img="https://www.forkinthekitchen.com/wp-content/uploads/2017/11/220113.noodle.stir_.fry-0405.jpg"
+           tabindex="0"
+           role="button"
+      >
+        <img src="https://www.forkinthekitchen.com/wp-content/uploads/2017/11/220113.noodle.stir_.fry-0405.jpg" alt="Vegetable Stir Fry" />
         <div class="meal-info">
           <h3>Vegetable Stir Fry</h3>
-          <p>Quick and healthy option</p>
+          <p>Quick and nutritious</p>
           <small>₱30 / serving · 15 min</small>
         </div>
       </div>
     </section>
 
-    <!-- Nearby Markets -->
+    <!-- Meal Modal -->
+    <div id="mealModal" class="modal" role="dialog" aria-modal="true" aria-hidden="true">
+      <div class="modal-content meal-modal">
+        <button class="close-btn" aria-label="Close meal modal">&times;</button>
+        <img id="mealImg" class="modal-image" alt="Meal Image" />
+        <h2 id="mealTitle"></h2>
+        <p id="mealDesc" class="muted"></p>
+
+        <div class="ingredients-section">
+          <h4><i data-lucide="list"></i> Ingredients</h4>
+          <ul id="mealIngredients"></ul>
+        </div>
+
+        <div class="steps-section">
+          <h4><i data-lucide="chef-hat"></i> Steps</h4>
+          <ol id="mealSteps"></ol>
+        </div>
+
+        <p id="mealCost" class="meal-cost muted"></p>
+      </div>
+    </div>
+
+    <!-- Market -->
     <section class="markets">
-      <h2>Nearby Markets</h2>
-      <div class="market-card">
-        <h3>Savemore SuperMarket Bangkal</h3>
-        <p>⭐ 4.8 rating · Open until 7PM</p>
+      <h2><i data-lucide="map-pin" class="section-icon"></i> Nearby Market</h2>
+
+      <div class="market-card"
+           data-market="Bankerohan Public Market"
+           data-info="⭐ 4.2 · 4,216 Google reviews"
+           data-location="Building No: 2, Barangay, Marfori Street, Poblacion District, Davao City, 8000 Davao del Sur"
+           data-img="https://2.bp.blogspot.com/-SjF9vDY2GgU/UGp69J5-J3I/AAAAAAAAEYA/FDaHsuq6vAI/s1600/DSC08072.JPG"
+           data-hours="Open 24 hours"
+           data-desc="Farmers sell grapefruit & durian at this busy market also popular for simple clothing & street food."
+           tabindex="0"
+           role="button"
+      >
+        <h3>Bankerohan Public Market</h3>
+        <p class="muted">⭐ 4.2 rating · Farmers’ market in Davao</p>
+        <p class="muted">Open 24 hours</p>
       </div>
     </section>
+
+    <!-- Market Modal -->
+    <div id="marketModal" class="modal" role="dialog" aria-modal="true" aria-hidden="true">
+      <div class="modal-content">
+        <button class="close-btn" aria-label="Close market modal">&times;</button>
+        <img id="marketImg" class="modal-image" alt="Market Image" />
+        <h2 id="marketTitle"></h2>
+        <p id="marketInfo" class="muted"></p>
+        <p id="marketDesc"></p>
+        <p id="marketLocation"></p>
+        <p id="marketHours"></p>
+
+        <div class="market-buttons">
+          <!-- Replace hrefs with real links if available -->
+          <a id="marketWebsite" class="market-btn" href="#" target="_blank" rel="noopener noreferrer"><i data-lucide="globe"></i> Website</a>
+          <a id="marketDirections" class="market-btn" href="#" target="_blank" rel="noopener noreferrer"><i data-lucide="navigation"></i> Directions</a>
+          <a id="marketReviews" class="market-btn" href="#" target="_blank" rel="noopener noreferrer"><i data-lucide="star"></i> Reviews</a>
+          <button id="marketSave" class="market-btn"><i data-lucide="bookmark"></i> Save</button>
+          <button id="marketShare" class="market-btn"><i data-lucide="share-2"></i> Share</button>
+        </div>
+      </div>
+    </div>
   </div>
 
-<%- include('partials/navbar', { activePage: 'home' }) %>
+  <%- include('partials/navbar', { activePage: 'home' }) %>
+
+  <script src="/scripts/home.js"></script>
+  <script>lucide.createIcons();</script>
 </body>
-
-<script src="/scripts/home.js"></script>
-
 </html>

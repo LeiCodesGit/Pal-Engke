@@ -1,59 +1,164 @@
-:root {
-  --primary-color: #f3ca52;
-  --secondary-color: #02472e;
-  --light-bg: #fcefb4;
+:root{
+  --bg: #fcefb4;
+  --primary: #f3ca52;
+  --secondary: #02472e;
+  --active: #007bff;
 }
 
-body {
-  background-color: var(--light-bg);
-  font-family: 'Segoe UI', sans-serif;
+/* page background */
+html, body {
+  height: 100%;
+  margin: 0;
+  font-family: 'Poppins', sans-serif;
+  background: var(--bg);
+  color: #333;
+  padding-bottom: 70px; /* room for navbar partial */
+}
+.community-bg { background: var(--bg); }
+
+/* main container */
+.community-container {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 1.5rem;
 }
 
+/* header: space-between on wide screens, stacked on small */
+.community-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+.community-header h3 { font-size: 1.8rem; font-weight: 600; margin: 0; }
+
+/* share button */
 .btn-share {
-  background-color: var(--primary-color);
-  color: var(--secondary-color);
+  background: var(--primary);
+  color: var(--secondary);
+  border: none;
+  border-radius: 8px;
+  padding: 0.6rem 1rem;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+/* tabs / filters centered */
+.filters {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.5rem;
+  margin: 1rem 0 1.5rem;
+  padding: 0;
+}
+.btn-filter {
+  border: none;
+  background: #f0f0f0;
+  padding: 0.6rem 1rem;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 0.95rem;
+  color: #555;
+}
+.btn-filter.active {
+  background: var(--active);
+  color: #fff;
   font-weight: bold;
 }
 
-.btn-filter {
-  border-radius: 20px;
-  background-color: #eee;
-  padding: 5px 15px;
-  font-size: 14px;
-}
-
-.btn-filter.active {
-  background-color: var(--secondary-color);
-  color: white;
-}
-
+/* recipe cards like meals.css */
 .recipe-card {
-  background: white;
+  background: #fff;
+  border-radius: 12px;
+  padding: 1.2rem;
+  margin: 1rem auto;
+  width: 100%;
+  max-width: 650px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
 }
+.recipe-card h5 { margin: 0.3rem 0; font-weight: 600; }
+.recipe-card p { margin: 0.3rem 0; color: #555; }
+.meta { font-size: 0.9rem; color: #777; }
 
+.badge { font-size: 0.8rem; margin-bottom: 0.5rem; }
+
+/* avatar */
 .avatar {
-  background-color: var(--secondary-color);
+  background-color: var(--secondary);
   color: white;
   font-weight: bold;
   border-radius: 50%;
-  width: 35px;
-  height: 35px;
+  width: 40px;
+  height: 40px;
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
-.meta {
-  font-size: 14px;
-  color: #777;
-}
-
+/* buttons */
 .btn-cost {
-  background-color: var(--primary-color);
-  color: var(--secondary-color);
+  background: var(--primary);
+  color: var(--secondary);
+  border: none;
+  border-radius: 8px;
+  padding: 0.4rem 0.8rem;
+  font-size: 0.9rem;
+}
+.btn-follow {
+  background: var(--secondary);
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 0.4rem 0.8rem;
+  font-size: 0.9rem;
 }
 
-.btn-follow {
-  background-color: var(--secondary-color);
-  color: white;
+/* responsive: header stacks on small screens */
+@media (max-width: 600px) {
+  .community-header {
+    flex-direction: column;
+    align-items: center;
+  }
+  .btn-share { margin-top: 0.6rem; }
+}
+
+/* ==== MODAL STYLES FOR COMMUNITY ==== */
+.custom-modal {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+}
+.custom-modal .modal-backdrop {
+  position: absolute;
+  width: 100%; height: 100%;
+  background: rgba(0,0,0,0.45);
+}
+.custom-modal .modal-content {
+  position: relative;
+  background: #fff;
+  border-radius: 12px;
+  padding: 1rem 1.5rem;
+  width: 90%;
+  max-width: 500px;
+  z-index: 10000;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
+.custom-modal .modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid #eee;
+  margin-bottom: 0.75rem;
+}
+.custom-modal .btn-close {
+  border: none;
+  background: none;
+  font-size: 1.5rem;
+  cursor: pointer;
 }

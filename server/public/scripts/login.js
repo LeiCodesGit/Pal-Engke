@@ -25,4 +25,13 @@ loginForm.addEventListener("submit", async (e) => {
         console.error(error);
         alert("Something went wrong:\n" + error);
     }
+
+    // Handle Google login button
+    const googleBtn = document.querySelector(".btn-google");
+    if (googleBtn) {
+        googleBtn.addEventListener("click", (e) => {
+            e.preventDefault();
+            window.location.href = "/auth/google";
+        });
+    }
 });

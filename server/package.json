@@ -1,6 +1,7 @@
 {
   "name": "server",
   "version": "1.0.0",
+  "type": "module",
   "description": "Pal-Engke",
   "main": "index.js",
   "scripts": {
@@ -42,7 +43,7 @@
     "express-session": "^1.18.2",
     "mongoose": "^8.16.1",
     "passport": "^0.7.0",
-    "passport-google-oauth20": "^2.0.0"
+    "passport-google-oauth20": "^2.0.0",
     "openai": "^6.2.0"
   },
   "devDependencies": {

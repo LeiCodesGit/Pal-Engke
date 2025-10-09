@@ -7,11 +7,13 @@
     --primary-color: #f3ca52;
     --light-primary-color: #f7d97d;
     --secondary-color: #02472e;
+    --light-secondary-color: #38a34a;
     --text-color: #333;
+    --card-bg: #fff;
 }
 
 .login-bg {
-    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+    background: linear-gradient(135deg, var(--primary-color), var(--light-secondary-color));
     background-size: 400% 400%;
     animation: gradientAnimation 15s ease infinite;
 }
@@ -28,8 +30,29 @@
     }
 }
 
-.label {
-    color: var(--primary-color);
+.card {
+    background-color: var(--card-bg);
+    border-radius: 12px;
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    text-align: center;
+}
+
+.card:hover {
+    transform: translateY(-8px) scale(1.03);
+    box-shadow: 0 12px 25px rgba(0, 0, 0, 0.2);
+}
+
+.logo {
+    width: 140px;
+    height: auto;
+    display: block;
+    margin: 0 auto;
+}
+
+h4 {
+    color: var(--text-color);
+    font-weight: 700;
 }
 
 .btn-submit {
@@ -38,9 +61,45 @@
     font-weight: bold;
     border: none;
     transition: background-color 0.3s ease, transform 0.2s ease;
+    border-radius: 8px;
+    height: 40px;
+    font-size: 1rem;
+    margin-top: 10px;
+
 }
 
 .btn-submit:hover {
     background-color: var(--light-primary-color);
     transform: scale(1.05);
+}   
+
+.password-wrapper {
+    position: relative;
+}
+
+.toggle-password {
+    position: absolute;
+    top: 50%;
+    right: 10px;
+    transform: translateY(-50%);
+    cursor: pointer;
+    color: #666;
+    font-size: 1.2rem;
+}
+
+.toggle-password:hover {
+    color: var(--secondary-color);
+}
+
+.btn-google {
+    border: 1px solid #ddd;
+    color: #333;
+    background: #fff;
+    font-weight: 500;
+    transition: all 0.3s ease;
+}
+
+.btn-google:hover {
+    background: #f7f7f7;
+    transform: scale(1.03);
 }

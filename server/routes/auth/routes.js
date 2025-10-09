@@ -2,6 +2,7 @@
 import bcrypt from "bcrypt";
 import express from "express";
 import User from "../../models/User.js";
+import passport from "../../config/passport.js";
 
 const authRouter = express.Router();
 
@@ -44,6 +45,17 @@ authRouter.post("/register", async (req, res) => {
             password: hashedPassword,
             age
         });
+
+        return res.status(201).json({
+            message: "Registration successful",
+            user: {
+                id: newUser._id,
+                firstName: newUser.firstName,
+                lastName: newUser.lastName,
+                email: newUser.email,
+                userType: newUser.userType
+            }
+        });
     }
     catch (error) {
         console.error("Registration error:", error);
@@ -81,7 +93,6 @@ authRouter.post("/login", async (req, res) => {
             userType: user.userType
         };
 
-        //send user data as JSON
         res.status(200).json({
             message: "Login successful",
             user: {
@@ -89,8 +100,6 @@ authRouter.post("/login", async (req, res) => {
                 firstName: user.firstName,
                 lastName: user.lastName,
                 email: user.email,
-                contactNumber: user.contactNumber,
-                age: user.age,
                 userType: user.userType
             }
         });
@@ -112,6 +121,23 @@ authRouter.post("/logout", (req, res) => {
         res.clearCookie("connect.sid"); // clear session cookie
         res.redirect("/auth/login");
     });
+});
+
+// Google OAuth routes
+authRouter.get("/google", passport.authenticate("google", { scope: ["profile", "email"] }));
+
+authRouter.get("/google/callback", passport.authenticate("google", {
+    failureRedirect: "/auth/login"
+}), (req, res) => {
+    req.session.user = {
+        id: req.user._id,
+        firstName: req.user.firstName,
+        lastName: req.user.lastName,
+        email: req.user.email,
+        userType: req.user.userType
+    };
+
+    res.redirect("/home");
 });
 
 export default authRouter;

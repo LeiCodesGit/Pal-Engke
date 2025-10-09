@@ -64,7 +64,7 @@ document.addEventListener("DOMContentLoaded", () => {
             if (response.status === 201) {
                 alert("Registration successful!");
                 registerForm.reset();
-                window.location.href = "/auth/login";
+                window.location.href = "/";
             }
         } catch (error) {
             const message = error.response?.data?.message || "Registration failed";
@@ -78,4 +78,7 @@ document.addEventListener("DOMContentLoaded", () => {
             console.error("Error details:", error.response?.data || error.message);
         }
     });
+
 });
+
+

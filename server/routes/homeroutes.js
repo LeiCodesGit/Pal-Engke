@@ -2,8 +2,7 @@ import express from "express";
 const homeRouter = express.Router();
 
 // Home page
-homeRouter.get("/home", (req, res) => {
-  // Safely pass the session user (or null if not logged in)
+homeRouter.get("/", (req, res) => {
   const user = req.session?.user || null;
   res.render("home", { user });
 });
@@ -19,7 +18,6 @@ homeRouter.get("/profile", (req, res) => {
   if (!req.session.user) {
     return res.redirect("/auth/login");
   }
-
   res.render("profile", { user: req.session.user });
 });
 

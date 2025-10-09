@@ -2,12 +2,13 @@ import express from "express";
 import path from "path";
 import { fileURLToPath } from "url";
 import dotenv from "dotenv";
-import connect from "./mongodb-connect.js";
+import connect from "./mongodb-connect.js";  
 import session from "express-session";
 import passport from "./config/passport.js";
 
 import authRouter from "./routes/auth/routes.js";
 import homeRouter from "./routes/homeroutes.js";
+import aiRouter from "./routes/airoutes.js";  
 
 dotenv.config();
 
@@ -29,8 +30,8 @@ app.use(
         resave: false,
         saveUninitialized: true,
         cookie: {
-        secure: false,
-        maxAge: 1000 * 60 * 60, // 1 hour
+            secure: false,
+            maxAge: 1000 * 60 * 60, // 1 hour
         },
     })
 );
@@ -49,6 +50,7 @@ app.use(express.static("public"));
 // Routes
 app.use("/auth", authRouter);
 app.use("/", homeRouter);
+app.use("/api", aiRouter);  
 
 // Default route
 app.get("/", (req, res) => {

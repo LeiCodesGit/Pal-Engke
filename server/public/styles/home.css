@@ -1,102 +1,236 @@
+/* ========= GENERAL PAGE STYLING ========= */
+:root{
+  --bg: #fcefb4;
+  --card-bg: #fffbea;
+  --accent-green: #acd8a7;
+  --muted: #666;
+  --shadow: rgba(0,0,0,0.12);
+}
+
+* { box-sizing: border-box; }
+
 body {
   margin: 0;
-  font-family: "Segoe UI", Arial, sans-serif;
-  background: #fcefb4;
-  color: #333;
+  font-family: 'Poppins', sans-serif;
+  background: var(--bg);
+  color: #222;
+  display: flex;
+  justify-content: center;
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 .dashboard-container {
+  width: 100%;
   max-width: 1000px;
-  margin: auto;
-  padding: 2rem;
+  padding: 2.25rem 1.25rem 8.5rem; 
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
 }
 
-/* Greeting */
-.greeting h1 {
-  font-size: 2rem;
-  margin-bottom: 0.3rem;
-}
-
-.greeting p {
-  color: #666;
-  margin-bottom: 2rem;
-}
-
-/* Budget Card */
-.budget-card {
-  background: #acd8a7;
-  padding: 1.5rem;
-  border-radius: 12px;
-  margin-bottom: 2rem;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-}
-
-.budget-card h2 {
-  margin-bottom: 0.5rem;
-}
-
-.budget-amount {
-  font-size: 1.3rem;
-  font-weight: bold;
-}
-
-.saved {
-  color: green;
-  font-size: 1rem;
-  margin-left: 0.5rem;
-}
-
-.remaining {
-  margin-top: 0.3rem;
-  color: #444;
-}
-
-/* Meals */
-.meals h2 {
-  margin-bottom: 1rem;
-}
-
-.meal-card {
+/* ===== GREETING ===== */
+.greeting {
   display: flex;
   gap: 1rem;
-  background: #fff;
-  padding: 1rem;
-  margin-bottom: 1rem;
-  border-radius: 12px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
   align-items: center;
+  background: rgba(255,255,255,0.5);
+  border-radius: 12px;
+  padding: 1rem;
+  box-shadow: 0 6px 18px var(--shadow);
 }
 
-.meal-card img {
-  width: 200px;
-  height: 130px;
-  object-fit: cover;
+.header-logo img {
+  width: 62px;
+  height: 62px;
   border-radius: 10px;
 }
 
-.meal-info h3 {
-  margin: 0 0 0.3rem;
+.greeting-text h1 {
+  margin: 0;
+  font-size: 1.9rem;
+  line-height: 1;
+  color: #2a2a2a;
 }
 
-.meal-info p {
-  margin: 0 0 0.3rem;
-  color: #666;
+.greeting-text p {
+  margin: 0.3rem 0 0;
+  color: var(--muted);
 }
 
-.meal-info small {
-  color: #888;
+/* ===== BUDGET CARD ===== */
+.budget-card {
+  background: var(--accent-green);
+  padding: 1.25rem;
+  border-radius: 14px;
+  box-shadow: 0 8px 20px var(--shadow);
+  cursor: pointer;
+  transition: transform .12s ease;
 }
 
-/* Markets */
-.markets h2 {
-  margin: 2rem 0 1rem;
+.budget-card:hover { transform: translateY(-4px); }
+
+/* ===== ICONS ===== */
+.budget-header .icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  font-size: 1.4rem;
+  color: #1f7a3a;
+  flex-shrink: 0;
 }
 
-.market-card {
-  background: #e3f2fd;
+/* general icon consistency */
+.meals h2 svg,
+.markets h2 svg,
+.budget-header svg {
+  width: 22px;
+  height: 22px;
+  color: inherit;
+  flex-shrink: 0;
+}
+
+.budget-amount {
+  font-size: 1.4rem;
+  font-weight: 700;
+  margin: 0.6rem 0 0;
+}
+
+.saved { color: #1b5e20; margin-left: 0.5rem; font-weight:600; }
+
+.remaining { margin-top: 0.35rem; color: #333; font-weight:500; }
+
+/* ===== SECTIONS ===== */
+.meals, .markets {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem; 
+  margin-bottom: 1rem; 
+}
+
+.meals h2, .markets h2 {
+  display:flex;
+  align-items:center;
+  gap:0.5rem;
+  margin: 0 0 0.75rem; 
+  font-size: 1.2rem;
+  color: #3b392f;
+}
+
+/* ===== CARDS ===== */
+.meal-card, .market-card {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+  background: #ffffff;
   padding: 1rem;
-  border-radius: 12px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+  border-radius: 14px;
+  box-shadow: 0 8px 18px var(--shadow);
+  transition: transform .12s ease, box-shadow .12s ease;
+  cursor: pointer;
+}
+
+.meal-card + .meal-card,
+.market-card + .market-card {
+  margin-top: 0.75rem; 
+}
+
+.meal-card:hover, .market-card:hover { 
+  transform: translateY(-4px); 
+  box-shadow: 0 12px 28px var(--shadow); 
+}
+
+.meal-card img {
+  width: 180px;
+  height: 120px;
+  object-fit: cover;
+  border-radius: 10px;
+  flex-shrink: 0;
+}
+
+.meal-info h3 { margin:0; color:#3e2e0f; font-size:1.05rem; }
+.meal-info p { margin: 0.3rem 0 0; color:var(--muted); }
+.meal-info small { color:#999; }
+
+/* ===== MODALS ===== */
+.modal {
+  display: none;
+  position: fixed;
+  inset: 0;
+  z-index: 120;
+  background: rgba(0,0,0,0.45);
+  padding: 2rem 1rem;
+  overflow-y: auto;
+}
+
+.modal-content {
+  background: var(--card-bg);
+  margin: 1.5rem auto;
+  border-radius: 14px;
+  padding: 1.2rem;
+  width: 100%;
+  max-width: 520px;
+  box-shadow: 0 12px 30px rgba(0,0,0,0.25);
+  position: relative;
+  overflow: hidden;
+  max-height: calc(100vh - 120px);
+  overflow-y: auto;
+}
+
+.modal-content > * { max-width: 100%; }
+
+.modal-image {
+  width: 100%;
+  height: 190px;
+  object-fit: cover;
+  border-radius: 10px;
+  margin-bottom: 12px;
+}
+
+.close-btn {
+  position: absolute;
+  top: 12px;
+  right: 14px;
+  background: transparent;
+  border: none;
+  font-size: 1.4rem;
+  cursor: pointer;
+  color: #333;
 }
 
 
+/* ===== FORM ===== */
+#budgetForm { display:flex; flex-direction:column; gap: .9rem; margin-top: .6rem; }
+#budgetForm input { padding: .7rem; border-radius: 8px; border: 1px solid #ccc; font-size: 1rem; }
+.save-btn { background: var(--accent-green); border:none; padding:.8rem; border-radius:8px; font-weight:700; cursor:pointer; }
+.save-btn:hover{ filter:brightness(.96); }
+
+/* ===== MEAL MODAL SECTIONS ===== */
+.ingredients-section h4, .steps-section h4 { display:flex; align-items:center; gap:.5rem; margin: 12px 0 8px; color:#4a3d23; }
+.ingredients-section ul, .steps-section ol { margin:0 0 8px 1.1rem; color:#444; line-height:1.45; }
+
+/* ===== MARKET BUTTONS ===== */
+.market-buttons { display:flex; flex-wrap:wrap; gap:.5rem; margin-top: 12px; }
+.market-btn { display:inline-flex; align-items:center; gap:.5rem; padding:.6rem .8rem; border-radius:8px; background:#e9f6ff; text-decoration:none; color:#1b4265; border: none; cursor:pointer; font-weight:600; }
+
+/* ===== MISC ===== */
+.muted { color: var(--muted); }
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 768px) {
+  .dashboard-container { padding: 1.75rem .9rem 10rem; }
+  .meal-card img { width: 140px; height: 110px; }
+  .modal-image { height: 160px; }
+}
+
+@media (max-width: 480px) {
+  .dashboard-container { padding: 1.25rem .6rem 10.5rem; }
+  .greeting-text h1 { font-size: 1.3rem; }
+  .meal-card { flex-direction: column; align-items:flex-start; }
+  .meal-card img { width:100%; height:160px; }
+  .modal-content { padding: 1rem; max-width: 92%; }
+}

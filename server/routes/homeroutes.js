@@ -2,7 +2,7 @@ import express from "express";
 const homeRouter = express.Router();
 
 // Home page
-homeRouter.get("/", (req, res) => {
+homeRouter.get("/home", (req, res) => {
   const user = req.session?.user || null;
   res.render("home", { user });
 });

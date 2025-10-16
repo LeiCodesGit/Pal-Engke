@@ -54,7 +54,7 @@ app.use("/api", aiRouter);
 
 // Default route
 app.get("/", (req, res) => {
-  res.redirect("/auth/login");
+    res.redirect("/auth/login");
 });
 
 // Start server

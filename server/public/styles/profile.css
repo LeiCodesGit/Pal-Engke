@@ -63,3 +63,39 @@
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
 }
 
+.profile-img {
+    width: 120px;
+    height: 120px;
+    object-fit: cover;
+    border-radius: 50%;
+    border: 3px solid #198754;
+    box-shadow: 0 0 8px rgba(0, 0, 0, 0.2);
+}
+
+/* Blur effect when modal is open */
+body.modal-open .profile-container {
+    filter: blur(6px);
+    transition: filter 0.3s ease-in-out;
+}
+
+/* Card container */
+.profile-card {
+    max-width: 600px;
+}
+
+/* Edit profile button (replaces Back to Home style) */
+#btn-editProfile {
+    background: linear-gradient(90deg, var(--btn-green), #b8ffcc);
+    color: #333;
+    border: none;
+    padding: 0.5rem 1.5rem;
+    border-radius: 25px;
+    font-size: 1rem;
+    transition: all 0.4s ease;
+}
+
+#btn-editProfile:hover {
+    background: linear-gradient(90deg, #b8ffcc, var(--btn-green));
+    transform: translateY(-2px) scale(1.03);
+    box-shadow: 0 5px 12px rgba(0, 0, 0, 0.2);
+}

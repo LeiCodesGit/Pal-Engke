@@ -1,4 +1,17 @@
 import { Schema, model } from "mongoose";
+import fs from "fs";
+import path from "path";
+
+const defaultImagePath = path.resolve("public/images/default-profile.png");
+let defaultProfileBase64 = null;
+
+try {
+    const imageBuffer = fs.readFileSync(defaultImagePath);
+    const base64 = imageBuffer.toString("base64");
+    defaultProfileBase64 = `data:image/png;base64,${base64}`;
+} catch (error) {
+    console.error("Could not load default profile image:", error);
+}
 
 const userSchema = new Schema(
     {
@@ -7,6 +20,12 @@ const userSchema = new Schema(
         enum: ["admin", "user", "premium_user"],
         required: true,
         default: "user",
+        },
+
+        profile_picture: {
+        type: String,
+        required: true,
+        default: defaultProfileBase64,
         },
 
         firstName: {
@@ -18,7 +37,7 @@ const userSchema = new Schema(
         lastName: {
         type: String,
         required: function () {
-            return !this.googleId; // required only if not a Google user
+            return !this.googleId;
         },
         trim: true,
         },
@@ -31,7 +50,6 @@ const userSchema = new Schema(
         trim: true,
         },
 
-        // Only required for non-Google users
         contactNumber: {
         type: String,
         required: function () {
@@ -39,7 +57,6 @@ const userSchema = new Schema(
         },
         },
 
-        // Only required for non-Google users
         password: {
         type: String,
         required: function () {
@@ -47,7 +64,6 @@ const userSchema = new Schema(
         },
         },
 
-        // Only required for non-Google users
         age: {
         type: Number,
         required: function () {

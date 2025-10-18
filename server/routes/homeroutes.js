@@ -28,9 +28,9 @@ homeRouter.get("/palengke", (req, res) => {
 });
 
 // Community page
-homeRouter.get("/community", (req, res) => {
-  const user = req.session?.user || null;
-  res.render("community", { user });
-});
+//homeRouter.get("/community", (req, res) => {
+ //const user = req.session?.user || null;
+  //res.render("community", { user });
+//});
 
 export default homeRouter;

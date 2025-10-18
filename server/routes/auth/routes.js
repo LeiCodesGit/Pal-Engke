@@ -90,7 +90,8 @@ authRouter.post("/login", async (req, res) => {
             email: user.email,
             contactNumber: user.contactNumber,
             age: user.age,
-            userType: user.userType
+            userType: user.userType,
+            profile_picture: user.profile_picture
         };
 
         res.status(200).json({

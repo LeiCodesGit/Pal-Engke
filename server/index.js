@@ -8,7 +8,9 @@ import passport from "./config/passport.js";
 
 import authRouter from "./routes/auth/routes.js";
 import homeRouter from "./routes/homeroutes.js";
+import communityRouter from "./routes/communityroute.js";
 import aiRouter from "./routes/airoutes.js";  
+import profileRouter from "./routes/profileroutes.js";
 
 dotenv.config();
 
@@ -50,7 +52,9 @@ app.use(express.static("public"));
 // Routes
 app.use("/auth", authRouter);
 app.use("/", homeRouter);
+app.use("/community", communityRouter);
 app.use("/api", aiRouter);  
+app.use("/profile", profileRouter);
 
 // Default route
 app.get("/", (req, res) => {

@@ -129,13 +129,18 @@ authRouter.get("/google", passport.authenticate("google", { scope: ["profile", "
 
 authRouter.get("/google/callback", passport.authenticate("google", {
     failureRedirect: "/auth/login"
-}), (req, res) => {
+    }), async (req, res) => {
+    const user = await User.findById(req.user._id);
+
     req.session.user = {
-        id: req.user._id,
-        firstName: req.user.firstName,
-        lastName: req.user.lastName,
-        email: req.user.email,
-        userType: req.user.userType
+        id: user._id,
+        firstName: user.firstName,
+        lastName: user.lastName,
+        email: user.email,
+        contactNumber: user.contactNumber,
+        age: user.age,
+        userType: user.userType,
+        profile_picture: user.profile_picture,
     };
 
     res.redirect("/home");

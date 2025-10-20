@@ -11,6 +11,7 @@ import homeRouter from "./routes/homeroutes.js";
 import communityRouter from "./routes/communityroute.js";
 import aiRouter from "./routes/airoutes.js";  
 import profileRouter from "./routes/profileroutes.js";
+import vendorsRouter from "./routes/vendors.js";
 
 dotenv.config();
 
@@ -55,6 +56,9 @@ app.use("/", homeRouter);
 app.use("/community", communityRouter);
 app.use("/api", aiRouter);  
 app.use("/profile", profileRouter);
+app.use("/api", aiRouter);
+app.use("/api/vendors", vendorsRouter); 
+
 
 // Default route
 app.get("/", (req, res) => {

@@ -1,64 +1,96 @@
-// PALENGKE PAGE INTERACTIONS
-document.addEventListener("DOMContentLoaded", () => {
-  // Remove unneeded filter buttons
-  document.querySelectorAll(".btn-filter").forEach(btn => {
-    const text = btn.textContent.trim().toLowerCase();
-    if (text === "vegetables" || text.includes("meat")) btn.remove();
-  });
+document.addEventListener("DOMContentLoaded", async () => {
+  console.log("✅ palengke.js loaded");
 
-  const viewButtons = document.querySelectorAll(".btn-view");
-  const callButtons = document.querySelectorAll(".btn-call");
-
-  // === Create market details modal ===
-  function openMarketModal(title, info) {
-    if (document.querySelector(".market-modal")) return;
-
-    const modal = document.createElement("div");
-    modal.className = "market-modal";
-    modal.innerHTML = `
-      <div class="modal-backdrop"></div>
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5>${title}</h5>
-          <button class="btn-close">&times;</button>
-        </div>
-        <div class="modal-body">
-          <p>${info}</p>
-          <p>🛍️ Products: Fresh produce, meats, local goods.</p>
-          <p>📍 Address: Barangay Central Area, Your City</p>
-          <p>🕔 Usually open: 5:00 AM – 6:00 PM</p>
-          <p>💬 “Known for friendly vendors and affordable prices.”</p>
-        </div>
-      </div>
-    `;
-    document.body.appendChild(modal);
-
-    const closeModal = () => modal.remove();
-    modal.querySelector(".btn-close").onclick = closeModal;
-    modal.querySelector(".modal-backdrop").onclick = closeModal;
+  const mapElement = document.getElementById("leaflet-map");
+  if (!mapElement) {
+    console.error("❌ Map container not found!");
+    return;
   }
 
-  // === View Details click ===
-  viewButtons.forEach(btn => {
-    btn.addEventListener("click", (e) => {
-      const card = e.target.closest(".market-card");
-      const name = card.querySelector("h5")?.textContent || "Market";
-      const info = card.querySelector("p")?.textContent || "Details not available";
-      openMarketModal(name, info);
-    });
-  });
+  // Initialize Leaflet Map
+  const map = L.map("leaflet-map").setView([14.6760, 121.0437], 14);
+  console.log("🗺️ Leaflet initialized");
 
-  // === Call Now click ===
-  callButtons.forEach(btn => {
-    btn.addEventListener("click", (e) => {
-      const card = e.target.closest(".market-card");
-      const text = card.textContent;
-      const phone = text.match(/(09\d{9}|\(\d{2}\)\s?\d{3}-\d{4})/);
-      if (phone) {
-        window.location.href = `tel:${phone[0].replace(/\D/g, "")}`;
-      } else {
-        alert("☎️ No phone number found for this market.");
+  // Load OpenStreetMap tiles
+  L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+    maxZoom: 19,
+    attribution: '&copy; OpenStreetMap contributors',
+  }).addTo(map);
+  console.log("✅ Tile layer added");
+
+  // Add default center marker (Pal-Engke HQ)
+  const defaultMarker = L.marker([14.6760, 121.0437]).addTo(map);
+  defaultMarker.bindPopup("<b>Pal-Engke HQ</b><br>Welcome!").openPopup();
+
+  // Request user geolocation
+  if (navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition(async (pos) => {
+      const lat = pos.coords.latitude;
+      const lng = pos.coords.longitude;
+
+      console.log(`📍 User location: ${lat}, ${lng}`);
+      map.setView([lat, lng], 15);
+
+      const userMarker = L.marker([lat, lng]).addTo(map)
+        .bindPopup("📍 You are here")
+        .openPopup();
+
+      // Fetch vendors near user location
+      try {
+        const res = await fetch(`/api/vendors?lat=${lat}&lng=${lng}&radius=3000`);
+        const vendors = await res.json();
+
+        if (!Array.isArray(vendors) || vendors.length === 0) {
+          console.warn("⚠️ No vendors found nearby.");
+          return;
+        }
+
+        vendors.forEach(v => {
+          if (v.location?.coordinates) {
+            const [vendorLng, vendorLat] = v.location.coordinates;
+            const marker = L.marker([vendorLat, vendorLng]).addTo(map);
+
+            const infoHTML = `
+              <div style="font-family: 'Poppins', sans-serif; min-width:200px;">
+                <strong>${v.name}</strong><br>
+                📍 ${v.address || "No address available"}<br>
+                ⏰ ${v.hours || "No schedule"}<br>
+                ⭐ ${v.rating || "No rating"}<br><br>
+                <button class="btn-ai" onclick="getAiSuggestion()">💡 Get AI Meal Suggestion</button>
+              </div>
+            `;
+
+            marker.bindPopup(infoHTML);
+          }
+        });
+      } catch (err) {
+        console.error("❌ Error fetching vendors:", err);
       }
+    }, (err) => {
+      console.warn("⚠️ Location access denied:", err);
+      alert("Please allow location access to view nearby markets.");
     });
-  });
+  } else {
+    alert("Geolocation not supported by this browser.");
+  }
 });
+
+// ====== AI Meal Suggestion Function ======
+async function getAiSuggestion() {
+  const ingredients = prompt("Enter ingredients you found in this market:");
+  if (!ingredients) return;
+
+  try {
+    const res = await fetch("/api/suggest-meal", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ ingredients }),
+    });
+
+    const data = await res.json();
+    alert(data.suggestion || "No suggestion found.");
+  } catch (err) {
+    console.error("❌ AI request failed:", err);
+    alert("AI suggestion failed. Please try again later.");
+  }
+}

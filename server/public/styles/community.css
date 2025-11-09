@@ -1,28 +1,18 @@
-:root {
-  --bg: #fcefb4;
-  --primary: #f3ca52;
-  --secondary: #02472e;
-  --active: #007bff;
-}
+/* ===== COMMUNITY PAGE ===== */
+@import url('./global.css');
 
 /* ===== PAGE LAYOUT ===== */
-html, body {
-  height: 100%;
-  margin: 0;
-  font-family: 'Poppins', sans-serif;
-  background: var(--bg);
-  color: #333;
-  padding-bottom: 70px; /* room for navbar partial */
-}
-
 .community-bg {
-  background: var(--bg);
+  background: var(--primary-yellow-light);
+  min-height: 100vh;
+  padding-bottom: 100px;
 }
 
 .community-container {
   max-width: 1000px;
   margin: 0 auto;
-  padding: 1.5rem;
+  padding: 2rem 1.5rem;
+  animation: fadeIn 0.4s ease;
 }
 
 /* ===== HEADER ===== */
@@ -31,28 +21,38 @@ html, body {
   justify-content: space-between;
   align-items: center;
   gap: 1rem;
-  margin-bottom: 1rem;
+  margin-bottom: 1.5rem;
+  background: white;
+  padding: 1.5rem;
+  border-radius: var(--border-radius-lg);
+  box-shadow: var(--shadow-md);
 }
 
 .community-header h3 {
-  font-size: 1.8rem;
-  font-weight: 600;
+  font-size: 2rem;
+  font-weight: 700;
   margin: 0;
+  color: var(--primary-green);
 }
 
 /* ===== SHARE BUTTON ===== */
 .btn-share {
-  background: var(--primary);
-  color: var(--secondary);
+  background: var(--primary-yellow);
+  color: var(--primary-green);
   border: none;
-  border-radius: 8px;
-  padding: 0.6rem 1rem;
-  font-weight: bold;
+  border-radius: var(--border-radius);
+  padding: 0.75rem 1.5rem;
+  font-weight: 700;
   cursor: pointer;
-  transition: background 0.2s;
+  transition: all var(--transition-normal);
+  box-shadow: var(--shadow-sm);
+  font-size: 1rem;
 }
+
 .btn-share:hover {
-  background: #f5d76e;
+  background: var(--primary-yellow-dark);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
 }
 
 /* ===== FILTER TABS ===== */
@@ -60,65 +60,103 @@ html, body {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  gap: 0.5rem;
-  margin: 1rem 0 1.5rem;
+  gap: 0.75rem;
+  margin: 1.5rem 0;
   padding: 0;
 }
+
 .btn-filter {
   border: none;
-  background: #f0f0f0;
-  padding: 0.6rem 1rem;
-  border-radius: 8px;
+  background: white;
+  padding: 0.75rem 1.25rem;
+  border-radius: var(--border-radius);
   cursor: pointer;
   font-size: 0.95rem;
-  color: #555;
-  transition: background 0.2s;
+  font-weight: 500;
+  color: var(--text-dark);
+  transition: all var(--transition-fast);
+  box-shadow: var(--shadow-sm);
 }
+
 .btn-filter.active {
-  background: var(--active);
-  color: #fff;
-  font-weight: bold;
+  background: var(--primary-green);
+  color: white;
+  font-weight: 600;
+  box-shadow: var(--shadow-md);
 }
+
 .btn-filter:hover {
-  background: #ddd;
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
 }
 
 /* ===== RECIPE CARDS ===== */
 .recipe-card {
-  background: #fff;
-  border-radius: 12px;
-  padding: 1.2rem;
-  margin: 1rem auto;
+  background: white;
+  border-radius: var(--border-radius-lg);
+  padding: 1.5rem;
+  margin: 1.25rem auto;
   width: 100%;
-  max-width: 650px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+  max-width: 700px;
+  box-shadow: var(--shadow-md);
+  transition: all var(--transition-normal);
+  border-left: 5px solid var(--primary-yellow);
 }
+
+.recipe-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-hover);
+  border-left-color: var(--primary-yellow-dark);
+}
+
 .recipe-card h5 {
-  margin: 0.3rem 0;
+  margin: 0.5rem 0;
   font-weight: 600;
+  color: var(--primary-green);
+  font-size: 1.1rem;
 }
+
 .recipe-card p {
-  margin: 0.3rem 0;
-  color: #555;
+  margin: 0.5rem 0;
+  color: var(--text-muted);
+  line-height: 1.6;
 }
+
 .recipe-card img {
   width: 100%;
-  border-radius: 10px;
-  margin: 0.5rem 0 0.8rem;
+  border-radius: var(--border-radius);
+  margin: 1rem 0;
   object-fit: cover;
+  max-height: 400px;
+  box-shadow: var(--shadow-sm);
 }
+
+.post-text {
+  color: var(--text-dark);
+  line-height: 1.7;
+  font-size: 1rem;
+}
+
+.post-image {
+  max-width: 100%;
+  border-radius: var(--border-radius);
+  object-fit: cover;
+  box-shadow: var(--shadow-sm);
+}
+
 .meta {
   font-size: 0.9rem;
-  color: #777;
+  color: var(--text-light);
 }
-.badge {
-  font-size: 0.8rem;
-  margin-bottom: 0.5rem;
+
+.small {
+  font-size: 0.85rem;
+  color: var(--text-light);
 }
 
 /* ===== AVATAR ===== */
 .avatar {
-  background-color: var(--secondary);
+  background-color: var(--primary-green);
   color: white;
   font-weight: bold;
   border-radius: 50%;
@@ -127,6 +165,7 @@ html, body {
   display: flex;
   align-items: center;
   justify-content: center;
+  box-shadow: var(--shadow-sm);
 }
 
 .avatar img {
@@ -136,42 +175,98 @@ html, body {
 
 /* ===== BUTTONS INSIDE POSTS ===== */
 .btn-cost {
-  background: var(--primary);
-  color: var(--secondary);
+  background: var(--primary-yellow);
+  color: var(--primary-green);
   border: none;
-  border-radius: 8px;
-  padding: 0.4rem 0.8rem;
+  border-radius: var(--border-radius);
+  padding: 0.5rem 1rem;
   font-size: 0.9rem;
+  font-weight: 600;
+  transition: all var(--transition-fast);
+}
+
+.btn-cost:hover {
+  background: var(--primary-yellow-dark);
 }
 
 .btn-follow {
-  background: var(--secondary);
-  color: #fff;
+  background: var(--primary-green);
+  color: white;
   border: none;
-  border-radius: 8px;
-  padding: 0.4rem 0.8rem;
+  border-radius: var(--border-radius);
+  padding: 0.5rem 1rem;
   font-size: 0.9rem;
+  font-weight: 600;
+  transition: all var(--transition-fast);
+}
+
+.btn-follow:hover {
+  background: var(--primary-green-light);
 }
 
 /* Like button */
 .btn-like {
   background: none;
   border: none;
-  font-size: 1rem;
+  font-size: 1.25rem;
   cursor: pointer;
-  transition: transform 0.1s ease-in;
+  transition: transform var(--transition-fast);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem;
+  border-radius: var(--border-radius);
 }
+
 .btn-like:hover {
-  transform: scale(1.1);
+  transform: scale(1.15);
+  background: rgba(0, 0, 0, 0.03);
+}
+
+.like-emoji {
+  font-size: 1.5rem;
+}
+
+.like-count {
+  font-weight: 600;
+  color: var(--text-dark);
+  font-size: 0.95rem;
 }
 
 /* Edit & Delete buttons */
 .btn-outline-primary,
 .btn-outline-danger {
-  font-size: 0.8rem;
-  padding: 0.3rem 0.6rem;
-  border-radius: 8px;
-  margin-left: 0.3rem;
+  font-size: 0.85rem;
+  padding: 0.4rem 0.75rem;
+  border-radius: var(--border-radius);
+  margin-left: 0.5rem;
+  font-weight: 600;
+  transition: all var(--transition-fast);
+}
+
+.btn-outline-primary:hover,
+.btn-outline-danger:hover {
+  transform: translateY(-2px);
+}
+
+.btn-edit {
+  border: 2px solid var(--primary-green);
+  color: var(--primary-green);
+}
+
+.btn-edit:hover {
+  background: var(--primary-green);
+  color: white;
+}
+
+.btn-delete {
+  border: 2px solid #dc3545;
+  color: #dc3545;
+}
+
+.btn-delete:hover {
+  background: #dc3545;
+  color: white;
 }
 
 /* ===== MODAL ===== */
@@ -185,58 +280,156 @@ html, body {
   align-items: center;
   justify-content: center;
   z-index: 9999;
+  animation: fadeIn 0.2s ease;
 }
+
 .custom-modal .modal-backdrop {
   position: absolute;
   width: 100%;
   height: 100%;
-  background: rgba(0,0,0,0.45);
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(4px);
 }
+
 .custom-modal .modal-content {
   position: relative;
-  background: #fff;
-  border-radius: 12px;
-  padding: 1rem 1.5rem;
+  background: white;
+  border-radius: var(--border-radius-lg);
+  padding: 2rem;
   width: 90%;
-  max-width: 500px;
+  max-width: 550px;
   z-index: 10000;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  box-shadow: var(--shadow-lg);
+  animation: fadeIn 0.3s ease;
 }
+
 .custom-modal .modal-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  border-bottom: 1px solid #eee;
-  margin-bottom: 0.75rem;
+  border-bottom: 2px solid var(--border-color);
+  margin-bottom: 1rem;
+  padding-bottom: 1rem;
 }
+
+.custom-modal .modal-header h5 {
+  color: var(--primary-green);
+  font-size: 1.5rem;
+  margin: 0;
+}
+
 .custom-modal .btn-close {
   border: none;
   background: none;
-  font-size: 1.5rem;
+  font-size: 1.75rem;
   cursor: pointer;
+  color: var(--text-light);
+  transition: all var(--transition-fast);
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.custom-modal .btn-close:hover {
+  background: rgba(0, 0, 0, 0.05);
+  color: var(--primary-green);
 }
 
 /* Preview Image in Modal */
 #preview {
-  max-height: 250px;
+  max-height: 300px;
+  width: 100%;
   object-fit: cover;
-  border-radius: 8px;
-  margin-top: 0.5rem;
+  border-radius: var(--border-radius);
+  margin-top: 1rem;
+  box-shadow: var(--shadow-sm);
 }
 
-.post-image {
-  max-width: 100%;
-  border-radius: 12px;
-  object-fit: cover;
+/* Form elements in modal */
+.custom-modal textarea,
+.custom-modal input[type="file"],
+.custom-modal input[type="text"] {
+  width: 100%;
+  padding: 0.875rem;
+  border: 2px solid var(--border-color);
+  border-radius: var(--border-radius);
+  font-family: 'Poppins', sans-serif;
+  font-size: 1rem;
+  margin-bottom: 1rem;
+  transition: all var(--transition-fast);
+}
+
+.custom-modal textarea:focus,
+.custom-modal input:focus {
+  border-color: var(--primary-green-light);
+  box-shadow: 0 0 0 3px rgba(56, 163, 74, 0.1);
+  outline: none;
+}
+
+.custom-modal button[type="submit"] {
+  background: var(--primary-yellow);
+  color: var(--primary-green);
+  border: none;
+  padding: 0.875rem 1.5rem;
+  border-radius: var(--border-radius);
+  font-weight: 700;
+  cursor: pointer;
+  width: 100%;
+  font-size: 1rem;
+  transition: all var(--transition-normal);
+  box-shadow: var(--shadow-sm);
+}
+
+.custom-modal button[type="submit"]:hover {
+  background: var(--primary-yellow-dark);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
 }
 
 /* ===== RESPONSIVE ===== */
+@media (max-width: 768px) {
+  .community-container {
+    padding: 1.5rem 1rem;
+  }
+  
+  .community-header {
+    padding: 1.25rem;
+  }
+  
+  .community-header h3 {
+    font-size: 1.65rem;
+  }
+  
+  .recipe-card {
+    padding: 1.25rem;
+  }
+}
+
 @media (max-width: 600px) {
   .community-header {
     flex-direction: column;
-    align-items: center;
+    align-items: flex-start;
   }
+  
   .btn-share {
-    margin-top: 0.6rem;
+    width: 100%;
+    text-align: center;
+  }
+  
+  .filters {
+    gap: 0.5rem;
+  }
+  
+  .btn-filter {
+    padding: 0.625rem 1rem;
+    font-size: 0.875rem;
+  }
+  
+  .custom-modal .modal-content {
+    padding: 1.5rem;
+    width: 95%;
   }
 }

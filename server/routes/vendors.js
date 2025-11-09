@@ -4,6 +4,58 @@ import Vendor from "../models/Vendor.js";
 
 const router = express.Router();
 
+// GET /api/vendors/search?query=...&lat=...&lng=...
+router.get("/search", async (req, res) => {
+  try {
+    const { query, lat, lng } = req.query;
+
+    if (!query || query.trim() === "") {
+      return res.status(400).json({ error: "Search query is required" });
+    }
+
+    console.log("🔍 Search query:", query);
+
+    // Build search criteria
+    const searchCriteria = {
+      $or: [
+        { name: { $regex: query, $options: "i" } },
+        { category: { $regex: query, $options: "i" } },
+        { address: { $regex: query, $options: "i" } }
+      ]
+    };
+
+    let vendors;
+
+    // If location provided, sort by distance
+    if (lat && lng) {
+      const latitude = parseFloat(lat);
+      const longitude = parseFloat(lng);
+
+      vendors = await Vendor.aggregate([
+        {
+          $geoNear: {
+            near: { type: "Point", coordinates: [longitude, latitude] },
+            distanceField: "distance",
+            maxDistance: 10000, // 10km radius
+            spherical: true,
+            query: searchCriteria
+          }
+        },
+        { $limit: 20 }
+      ]);
+    } else {
+      // No location - just search
+      vendors = await Vendor.find(searchCriteria).limit(20);
+    }
+
+    console.log(`✅ Found ${vendors.length} vendors matching "${query}"`);
+    res.json(vendors);
+  } catch (err) {
+    console.error("❌ Search error:", err);
+    res.status(500).json({ error: "Search failed", message: err.message });
+  }
+});
+
 // GET /api/vendors?lat=...&lng=...&radius=meters
 router.get("/", async (req, res) => {
   try {

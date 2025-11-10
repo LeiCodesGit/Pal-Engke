@@ -160,6 +160,37 @@ h1 {
   transform: translateY(0);
 }
 
+/* View on Map Button */
+.btn-view-map {
+  background: var(--primary-green);
+  color: white;
+  border: none;
+  border-radius: var(--border-radius);
+  padding: 0.5rem 1rem;
+  margin-top: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 0.9rem;
+  transition: all var(--transition-fast);
+  font-family: 'Poppins', sans-serif;
+  box-shadow: var(--shadow-sm);
+}
+
+.btn-view-map:hover {
+  background: var(--primary-green-light);
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-md);
+}
+
+.btn-view-map:active {
+  transform: translateY(0);
+}
+
+/* Markets List Styling */
+.markets-list {
+  max-width: 100% !important;
+}
+
 /* Responsive Adjustments */
 @media (max-width: 768px) {
   body {

@@ -109,10 +109,10 @@ document.addEventListener("DOMContentLoaded", async () => {
   // Initialize Filters
   initializeFilters();
 
-  // Initialize Leaflet Map
-  const map = L.map("leaflet-map").setView([14.6760, 121.0437], 14);
+  // Initialize Leaflet Map - Centered on Davao City
+  const map = L.map("leaflet-map").setView([7.0731, 125.6128], 13);
   window.map = map; // Make map globally accessible
-  console.log("🗺️ Leaflet initialized");
+  console.log("🗺️ Leaflet initialized - Davao City");
 
   // Load OpenStreetMap tiles
   L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
@@ -121,9 +121,9 @@ document.addEventListener("DOMContentLoaded", async () => {
   }).addTo(map);
   console.log("✅ Tile layer added");
 
-  // Add default center marker (Pal-Engke HQ)
-  const defaultMarker = L.marker([14.6760, 121.0437]).addTo(map);
-  defaultMarker.bindPopup("<b>Pal-Engke HQ</b><br>Welcome!").openPopup();
+  // Add default center marker (Bankerohan Market - Davao City)
+  const defaultMarker = L.marker([7.0731, 125.6128]).addTo(map);
+  defaultMarker.bindPopup("<b>Bankerohan Public Market</b><br>Davao City's largest market!").openPopup();
 
   // Request user geolocation
   if (navigator.geolocation) {
@@ -143,6 +143,30 @@ document.addEventListener("DOMContentLoaded", async () => {
 
       // Fetch vendors near user location
       await fetchNearbyVendors(lat, lng);
+      
+      // Check if we need to show directions to a specific market (from meals page)
+      const targetMarket = sessionStorage.getItem('targetMarket');
+      if (targetMarket) {
+        try {
+          const market = JSON.parse(targetMarket);
+          console.log('🎯 Navigating to market from meals page:', market.name);
+          
+          // Center map on the target market
+          map.setView([market.lat, market.lng], 16);
+          
+          // Add marker for the target market
+          const targetMarker = L.marker([market.lat, market.lng]).addTo(map);
+          targetMarker.bindPopup(`<b>${market.name}</b><br>📍 Your destination from meal search`).openPopup();
+          
+          // Show directions automatically
+          showDirections(market.lat, market.lng, market.name);
+          
+          // Clear the sessionStorage
+          sessionStorage.removeItem('targetMarket');
+        } catch (e) {
+          console.error('Error loading target market:', e);
+        }
+      }
     }, (err) => {
       console.warn("⚠️ Location access denied:", err);
       alert("Please allow location access to view nearby markets.");

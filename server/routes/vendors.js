@@ -4,6 +4,35 @@ import Vendor from "../models/Vendor.js";
 
 const router = express.Router();
 
+// Real Davao City public markets (same as in airoutes.js)
+const realPublicMarkets = [
+  { name: "Bankerohan Public Market", lat: 7.0731, lng: 125.6128, address: "Bankerohan, Davao City", category: "Public Market", hours: "5:00 AM - 8:00 PM", phone: "(082) 221-1234", rating: "4.5", specialties: ["Fresh produce", "Seafood", "Meat", "General goods"] },
+  { name: "Agdao Public Market", lat: 7.0897, lng: 125.6289, address: "Agdao, Davao City", category: "Public Market", hours: "6:00 AM - 7:00 PM", phone: "(082) 234-5678", rating: "4.3", specialties: ["Vegetables", "Fruits", "Poultry", "Dry goods"] },
+  { name: "Toril Public Market", lat: 7.0042, lng: 125.5147, address: "Toril, Davao City", category: "Public Market", hours: "5:30 AM - 7:30 PM", phone: "(082) 291-2345", rating: "4.2", specialties: ["Fresh fish", "Vegetables", "Local products"] },
+  { name: "Matina Town Square", lat: 7.0608, lng: 125.5908, address: "Matina, Davao City", category: "Public Market", hours: "6:00 AM - 9:00 PM", phone: "(082) 297-3456", rating: "4.4", specialties: ["Groceries", "Fresh produce", "Cooked food"] },
+  { name: "Magallanes Public Market", lat: 7.0431, lng: 125.5789, address: "Magallanes, Davao City", category: "Public Market", hours: "5:00 AM - 7:00 PM", phone: "(082) 296-4567", rating: "4.1", specialties: ["Vegetables", "Fruits", "Meat products"] },
+  { name: "Monteverde Public Market", lat: 7.0689, lng: 125.6234, address: "Monteverde, Davao City", category: "Public Market", hours: "6:00 AM - 8:00 PM", phone: "(082) 233-5678", rating: "4.0", specialties: ["Fresh produce", "Seafood", "General goods"] },
+  { name: "Buhangin Public Market", lat: 7.1092, lng: 125.6523, address: "Buhangin, Davao City", category: "Public Market", hours: "5:30 AM - 7:30 PM", phone: "(082) 241-6789", rating: "4.2", specialties: ["Vegetables", "Fish", "Poultry"] },
+  { name: "Tigatto Public Market", lat: 7.1478, lng: 125.6089, address: "Tigatto, Davao City", category: "Public Market", hours: "6:00 AM - 7:00 PM", phone: "(082) 285-7890", rating: "4.0", specialties: ["Fresh produce", "Meat", "Dry goods"] },
+  { name: "Roxas Night Market", lat: 7.0644, lng: 125.6075, address: "Roxas Avenue, Davao City", category: "Night Market", hours: "6:00 PM - 2:00 AM", phone: "(082) 222-8901", rating: "4.6", specialties: ["Street food", "Grilled items", "Local delicacies", "Durian"] }
+];
+
+// Helper function to calculate distance
+function calculateDistance(lat1, lng1, lat2, lng2) {
+  const R = 6371000; // Earth's radius in meters
+  const φ1 = (lat1 * Math.PI) / 180;
+  const φ2 = (lat2 * Math.PI) / 180;
+  const Δφ = ((lat2 - lat1) * Math.PI) / 180;
+  const Δλ = ((lng2 - lng1) * Math.PI) / 180;
+
+  const a =
+    Math.sin(Δφ / 2) * Math.sin(Δφ / 2) +
+    Math.cos(φ1) * Math.cos(φ2) * Math.sin(Δλ / 2) * Math.sin(Δλ / 2);
+  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+
+  return R * c;
+}
+
 // GET /api/vendors/search?query=...&lat=...&lng=...
 router.get("/search", async (req, res) => {
   try {
@@ -15,41 +44,41 @@ router.get("/search", async (req, res) => {
 
     console.log("🔍 Search query:", query);
 
-    // Build search criteria
-    const searchCriteria = {
-      $or: [
-        { name: { $regex: query, $options: "i" } },
-        { category: { $regex: query, $options: "i" } },
-        { address: { $regex: query, $options: "i" } }
-      ]
-    };
+    // Search in real markets
+    const searchLower = query.toLowerCase();
+    let results = realPublicMarkets.filter(market => 
+      market.name.toLowerCase().includes(searchLower) ||
+      market.address.toLowerCase().includes(searchLower) ||
+      market.category.toLowerCase().includes(searchLower) ||
+      market.specialties.some(s => s.toLowerCase().includes(searchLower))
+    );
 
-    let vendors;
-
-    // If location provided, sort by distance
+    // If location provided, add distance and sort
     if (lat && lng) {
-      const latitude = parseFloat(lat);
-      const longitude = parseFloat(lng);
-
-      vendors = await Vendor.aggregate([
-        {
-          $geoNear: {
-            near: { type: "Point", coordinates: [longitude, latitude] },
-            distanceField: "distance",
-            maxDistance: 10000, // 10km radius
-            spherical: true,
-            query: searchCriteria
-          }
-        },
-        { $limit: 20 }
-      ]);
+      const userLat = parseFloat(lat);
+      const userLng = parseFloat(lng);
+      
+      results = results.map(market => ({
+        ...market,
+        distance: calculateDistance(userLat, userLng, market.lat, market.lng),
+        location: {
+          coordinates: [market.lng, market.lat]
+        }
+      }));
+      
+      results.sort((a, b) => a.distance - b.distance);
     } else {
-      // No location - just search
-      vendors = await Vendor.find(searchCriteria).limit(20);
+      // No location - just add location field for map compatibility
+      results = results.map(market => ({
+        ...market,
+        location: {
+          coordinates: [market.lng, market.lat]
+        }
+      }));
     }
 
-    console.log(`✅ Found ${vendors.length} vendors matching "${query}"`);
-    res.json(vendors);
+    console.log(`✅ Found ${results.length} markets matching "${query}"`);
+    res.json(results);
   } catch (err) {
     console.error("❌ Search error:", err);
     res.status(500).json({ error: "Search failed", message: err.message });
@@ -62,23 +91,33 @@ router.get("/", async (req, res) => {
     const { lat, lng, radius = 3000 } = req.query;
 
     if (!lat || !lng) {
-      // return sample vendors if no coords provided
-      const all = await Vendor.find({}).limit(40).lean();
-      return res.json(all);
+      // Return all real markets
+      const marketsWithLocation = realPublicMarkets.map(market => ({
+        ...market,
+        location: {
+          coordinates: [market.lng, market.lat]
+        }
+      }));
+      return res.json(marketsWithLocation);
     }
 
-    const vendors = await Vendor.find({
-      location: {
-        $nearSphere: {
-          $geometry: { type: "Point", coordinates: [parseFloat(lng), parseFloat(lat)] },
-          $maxDistance: parseInt(radius),
-        },
-      },
-    })
-      .limit(200)
-      .lean();
+    const userLat = parseFloat(lat);
+    const userLng = parseFloat(lng);
+    const maxDistance = parseInt(radius);
 
-    res.json(vendors);
+    // Filter markets within radius and add distance
+    let nearbyMarkets = realPublicMarkets
+      .map(market => ({
+        ...market,
+        distance: calculateDistance(userLat, userLng, market.lat, market.lng),
+        location: {
+          coordinates: [market.lng, market.lat]
+        }
+      }))
+      .filter(market => market.distance <= maxDistance)
+      .sort((a, b) => a.distance - b.distance);
+
+    res.json(nearbyMarkets);
   } catch (err) {
     console.error("vendors route error:", err);
     res.status(500).json({ error: "Failed to fetch vendors" });
@@ -88,12 +127,24 @@ router.get("/", async (req, res) => {
 // GET /api/vendors/:id
 router.get("/:id", async (req, res) => {
   try {
-    const vendor = await Vendor.findById(req.params.id).lean();
-    if (!vendor) return res.status(404).json({ error: "Not found" });
-    res.json(vendor);
+    // For real markets, we'll try to find by name match
+    const market = realPublicMarkets.find(m => 
+      m.name.toLowerCase().replace(/\s+/g, '-') === req.params.id.toLowerCase()
+    );
+    
+    if (!market) {
+      return res.status(404).json({ error: "Market not found" });
+    }
+    
+    res.json({
+      ...market,
+      location: {
+        coordinates: [market.lng, market.lat]
+      }
+    });
   } catch (err) {
     console.error(err);
-    res.status(500).json({ error: "Failed to fetch vendor" });
+    res.status(500).json({ error: "Failed to fetch market" });
   }
 });
 

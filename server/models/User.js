@@ -72,6 +72,11 @@ const userSchema = new Schema(
         min: 0,
         },
 
+        budget: {
+        weekly: { type: Number, default: 0 },
+        savingsGoal: { type: Number, default: 0 },
+        },
+
         googleId: {
         type: String,
         default: null,

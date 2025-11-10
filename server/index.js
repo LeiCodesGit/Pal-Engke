@@ -56,7 +56,6 @@ app.use("/", homeRouter);
 app.use("/community", communityRouter);
 app.use("/api", aiRouter);  
 app.use("/profile", profileRouter);
-app.use("/api", aiRouter);
 app.use("/api/vendors", vendorsRouter); 
 
 

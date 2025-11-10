@@ -19,23 +19,109 @@ function calculateDistanceClient(lat1, lon1, lat2, lon2) {
 }
 
 // ====== AI Meal Suggestion Function ======
-async function getAiSuggestion() {
-  const ingredients = prompt("Enter ingredients you found in this market:");
-  if (!ingredients) return;
+async function getAiSuggestion(marketName) {
+  // Create a custom modal for input
+  const modalHTML = `
+    <div id="ai-meal-modal" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); z-index: 10000; display: flex; align-items: center; justify-content: center;">
+      <div style="background: white; border-radius: 15px; padding: 2rem; max-width: 500px; width: 90%; box-shadow: 0 10px 40px rgba(0,0,0,0.3);">
+        <h4 style="color: var(--primary-green); margin-bottom: 1rem;">🍽️ AI Meal Suggestion</h4>
+        <p style="color: #666; margin-bottom: 1.5rem;">What ingredients did you find at <strong>${marketName || 'this market'}</strong>?</p>
+        <input type="text" id="modal-ingredients-input" placeholder="e.g., fish, tomatoes, onions, ginger" style="width: 100%; padding: 0.75rem; border: 2px solid #ddd; border-radius: 8px; font-size: 1rem; margin-bottom: 1rem;">
+        <div style="display: flex; gap: 0.75rem; justify-content: flex-end;">
+          <button id="modal-cancel-btn" style="padding: 0.75rem 1.5rem; background: #e0e0e0; border: none; border-radius: 8px; cursor: pointer; font-weight: 600;">Cancel</button>
+          <button id="modal-submit-btn" style="padding: 0.75rem 1.5rem; background: var(--primary-green); color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: 600;">Get Suggestion</button>
+        </div>
+      </div>
+    </div>
+  `;
+  
+  document.body.insertAdjacentHTML('beforeend', modalHTML);
+  
+  const modal = document.getElementById('ai-meal-modal');
+  const input = document.getElementById('modal-ingredients-input');
+  const cancelBtn = document.getElementById('modal-cancel-btn');
+  const submitBtn = document.getElementById('modal-submit-btn');
+  
+  input.focus();
+  
+  // Handle cancel
+  cancelBtn.onclick = () => modal.remove();
+  modal.onclick = (e) => {
+    if (e.target === modal) modal.remove();
+  };
+  
+  // Handle submit
+  const handleSubmit = async () => {
+    const ingredients = input.value.trim();
+    if (!ingredients) {
+      input.style.borderColor = 'red';
+      return;
+    }
+    
+    // Show loading
+    submitBtn.innerHTML = '<span style="display: inline-block; animation: spin 1s linear infinite;">⏳</span> Loading...';
+    submitBtn.disabled = true;
+    
+    try {
+      const res = await fetch("/api/suggest-meal", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ ingredients }),
+      });
 
-  try {
-    const res = await fetch("/api/suggest-meal", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ ingredients }),
-    });
+      const data = await res.json();
+      
+      // Remove input modal
+      modal.remove();
+      
+      // Show result in a new modal
+      if (data.suggestion) {
+        showMealResultModal(data.suggestion, marketName);
+      } else {
+        alert("No suggestion found. Please try again.");
+      }
+    } catch (err) {
+      console.error("❌ AI request failed:", err);
+      modal.remove();
+      alert("AI suggestion failed. Please try again later.");
+    }
+  };
+  
+  submitBtn.onclick = handleSubmit;
+  input.onkeypress = (e) => {
+    if (e.key === 'Enter') handleSubmit();
+  };
+}
 
-    const data = await res.json();
-    alert(data.suggestion || "No suggestion found.");
-  } catch (err) {
-    console.error("❌ AI request failed:", err);
-    alert("AI suggestion failed. Please try again later.");
-  }
+// Show meal suggestion result in a modal
+function showMealResultModal(suggestion, marketName) {
+  const resultModalHTML = `
+    <div id="ai-result-modal" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); z-index: 10000; display: flex; align-items: center; justify-content: center; overflow-y: auto;">
+      <div style="background: white; border-radius: 15px; padding: 2rem; max-width: 600px; width: 90%; max-height: 80vh; overflow-y: auto; box-shadow: 0 10px 40px rgba(0,0,0,0.3); margin: 2rem;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+          <h4 style="color: var(--primary-green); margin: 0;">🍽️ Meal Suggestion</h4>
+          <button id="result-close-btn" style="background: none; border: none; font-size: 1.5rem; cursor: pointer; color: #999;">&times;</button>
+        </div>
+        <div style="background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%); padding: 1.5rem; border-radius: 10px; border-left: 4px solid var(--primary-green); margin-bottom: 1rem;">
+          <div style="line-height: 1.8; color: #333;">${suggestion.replace(/\n/g, '<br>').replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')}</div>
+        </div>
+        ${marketName ? `<p style="color: #666; font-style: italic; text-align: center; margin-top: 1rem;">💡 Ingredients available at <strong>${marketName}</strong></p>` : ''}
+        <button id="result-ok-btn" style="width: 100%; padding: 0.75rem; background: var(--primary-green); color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: 600; margin-top: 1rem;">Got it!</button>
+      </div>
+    </div>
+  `;
+  
+  document.body.insertAdjacentHTML('beforeend', resultModalHTML);
+  
+  const resultModal = document.getElementById('ai-result-modal');
+  const closeBtn = document.getElementById('result-close-btn');
+  const okBtn = document.getElementById('result-ok-btn');
+  
+  closeBtn.onclick = () => resultModal.remove();
+  okBtn.onclick = () => resultModal.remove();
+  resultModal.onclick = (e) => {
+    if (e.target === resultModal) resultModal.remove();
+  };
 }
 
 // ====== Show Directions Function ======
@@ -137,7 +223,17 @@ document.addEventListener("DOMContentLoaded", async () => {
       console.log(`📍 User location: ${lat}, ${lng}`);
       map.setView([lat, lng], 15);
 
-      const userMarker = L.marker([lat, lng]).addTo(map)
+      // Create blue icon for user location
+      const blueIcon = L.icon({
+        iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-blue.png',
+        shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/images/marker-shadow.png',
+        iconSize: [25, 41],
+        iconAnchor: [12, 41],
+        popupAnchor: [1, -34],
+        shadowSize: [41, 41]
+      });
+
+      const userMarker = L.marker([lat, lng], { icon: blueIcon }).addTo(map)
         .bindPopup("📍 You are here")
         .openPopup();
 
@@ -154,8 +250,18 @@ document.addEventListener("DOMContentLoaded", async () => {
           // Center map on the target market
           map.setView([market.lat, market.lng], 16);
           
+          // Create red icon for target market
+          const redIcon = L.icon({
+            iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-red.png',
+            shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/images/marker-shadow.png',
+            iconSize: [25, 41],
+            iconAnchor: [12, 41],
+            popupAnchor: [1, -34],
+            shadowSize: [41, 41]
+          });
+          
           // Add marker for the target market
-          const targetMarker = L.marker([market.lat, market.lng]).addTo(map);
+          const targetMarker = L.marker([market.lat, market.lng], { icon: redIcon }).addTo(map);
           targetMarker.bindPopup(`<b>${market.name}</b><br>📍 Your destination from meal search`).openPopup();
           
           // Show directions automatically
@@ -205,6 +311,16 @@ async function fetchNearbyVendors(lat, lng) {
 
     console.log(`✅ Found ${vendors.length} nearby vendors`);
 
+    // Create green icon for markets
+    const greenIcon = L.icon({
+      iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-green.png',
+      shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/images/marker-shadow.png',
+      iconSize: [25, 41],
+      iconAnchor: [12, 41],
+      popupAnchor: [1, -34],
+      shadowSize: [41, 41]
+    });
+
     // Clear previous markers except user marker
     if (window.map) {
       window.map.eachLayer((layer) => {
@@ -218,7 +334,7 @@ async function fetchNearbyVendors(lat, lng) {
     vendors.forEach(v => {
       if (v.location?.coordinates) {
         const [vendorLng, vendorLat] = v.location.coordinates;
-        const marker = L.marker([vendorLat, vendorLng]).addTo(window.map);
+        const marker = L.marker([vendorLat, vendorLng], { icon: greenIcon }).addTo(window.map);
 
         const infoHTML = `
           <div style="font-family: 'Poppins', sans-serif; min-width:200px;">
@@ -227,7 +343,7 @@ async function fetchNearbyVendors(lat, lng) {
             📦 ${v.category || "General market"}<br>
             ⏰ ${v.hours || "No schedule"}<br>
             ⭐ ${v.rating || "No rating"}<br><br>
-            <button class="btn-ai" onclick="getAiSuggestion()">💡 Get AI Meal Suggestion</button>
+            <button class="btn-ai" onclick="getAiSuggestion('${v.name.replace(/'/g, "\\'")}')">💡 Get AI Meal Suggestion</button>
             <button class="btn-directions" onclick="showDirections(${vendorLat}, ${vendorLng}, '${v.name}')">🗺️ Show Directions</button>
           </div>
         `;
@@ -395,10 +511,20 @@ async function handleSmartSearch(query, marketsSection, aiResponseBox, aiRespons
         if (data.markets && data.markets.length > 0) {
           displayRecommendedMarkets(data.markets, marketsSection);
           
+          // Create green icon for AI recommended markets
+          const greenIcon = L.icon({
+            iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-green.png',
+            shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/images/marker-shadow.png',
+            iconSize: [25, 41],
+            iconAnchor: [12, 41],
+            popupAnchor: [1, -34],
+            shadowSize: [41, 41]
+          });
+          
           // Add markers to map
           data.markets.forEach(m => {
             if (m.lat && m.lng && window.map) {
-              const marker = L.marker([m.lat, m.lng]).addTo(window.map);
+              const marker = L.marker([m.lat, m.lng], { icon: greenIcon }).addTo(window.map);
               marker.bindPopup(`
                 <div style="font-family: 'Poppins', sans-serif; min-width:200px;">
                   <strong>${m.name}</strong><br>
@@ -509,11 +635,21 @@ async function performSearch(query, marketsSection) {
     // Display results as cards
     marketsSection.innerHTML = `<h4 class="fw-bold mb-3">🔍 Search Results for "${query}"</h4>`;
     
+    // Create green icon for search results
+    const greenIcon = L.icon({
+      iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-green.png',
+      shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/images/marker-shadow.png',
+      iconSize: [25, 41],
+      iconAnchor: [12, 41],
+      popupAnchor: [1, -34],
+      shadowSize: [41, 41]
+    });
+    
     vendors.forEach(v => {
       // Add marker to map
       if (v.location?.coordinates && window.map) {
         const [lng, lat] = v.location.coordinates;
-        const marker = L.marker([lat, lng]).addTo(window.map);
+        const marker = L.marker([lat, lng], { icon: greenIcon }).addTo(window.map);
         
         const popupHTML = `
           <div style="font-family: 'Poppins', sans-serif; min-width:200px;">

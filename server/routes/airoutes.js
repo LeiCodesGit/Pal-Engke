@@ -84,15 +84,15 @@ router.post("/suggest-meal", async (req, res) => {
 
     // ✅ Step 3: Find real public markets in Davao City that likely sell these ingredients
     const realPublicMarkets = [
-      { name: "Bankerohan Public Market", lat: 7.0731, lng: 125.6128, specialties: ["vegetables", "fruits", "seafood", "meat", "durian", "organic"], hours: "5:00 AM - 7:00 PM", phone: "(082) 227-2828" },
-      { name: "Agdao Public Market", lat: 7.0897, lng: 125.6289, specialties: ["seafood", "meat", "vegetables", "poultry"], hours: "5:00 AM - 8:00 PM", phone: "(082) 234-5678" },
-      { name: "Toril Public Market", lat: 7.0042, lng: 125.5147, specialties: ["vegetables", "fruits", "organic", "fish"], hours: "4:00 AM - 7:00 PM", phone: "(082) 291-3456" },
-      { name: "Matina Town Square Public Market", lat: 7.0608, lng: 125.5908, specialties: ["vegetables", "seafood", "meat"], hours: "6:00 AM - 9:00 PM", phone: "(082) 297-4567" },
-      { name: "Magallanes Public Market", lat: 7.0431, lng: 125.5789, specialties: ["produce", "seafood", "meat"], hours: "5:00 AM - 7:00 PM", phone: "(082) 241-7890" },
-      { name: "Monteverde Public Market", lat: 7.0689, lng: 125.6234, specialties: ["vegetables", "seafood", "meat", "dry goods"], hours: "5:30 AM - 8:00 PM", phone: "(082) 285-6789" },
-      { name: "Buhangin Public Market", lat: 7.1092, lng: 125.6523, specialties: ["vegetables", "fruits", "seafood"], hours: "5:00 AM - 7:30 PM", phone: "(082) 276-5432" },
-      { name: "Tigatto Public Market", lat: 7.1478, lng: 125.6089, specialties: ["vegetables", "fruits", "wholesale"], hours: "4:30 AM - 8:00 PM", phone: "(082) 333-2468" },
-      { name: "Roxas Avenue Night Market", lat: 7.0644, lng: 125.6075, specialties: ["street food", "fruits", "seafood", "grilled"], hours: "6:00 PM - 2:00 AM", phone: "(082) 222-1234" }
+      { name: "Bankerohan Public Market", lat: 7.0688, lng: 125.6009, specialties: ["vegetables", "fruits", "seafood", "meat", "durian", "organic"], hours: "5:00 AM - 7:00 PM", phone: "(082) 227-2828" },
+      { name: "Agdao Public Market", lat: 7.0821, lng: 125.6232, specialties: ["seafood", "meat", "vegetables", "poultry"], hours: "5:00 AM - 8:00 PM", phone: "(082) 234-5678" },
+      { name: "Toril Public Market", lat: 7.0183, lng: 125.4959, specialties: ["vegetables", "fruits", "organic", "fish"], hours: "4:00 AM - 7:00 PM", phone: "(082) 291-3456" },
+      { name: "Matina Crossing Public Market", lat: 7.0584, lng: 125.5698, specialties: ["vegetables", "seafood", "meat"], hours: "6:00 AM - 9:00 PM", phone: "(082) 297-4567" },
+      { name: "Puan Night Market", lat: 7.0512, lng: 125.5397, specialties: ["produce", "seafood", "meat"], hours: "5:00 AM - 7:00 PM", phone: "(082) 241-7890" },
+      { name: "Panacan Public Market", lat: 7.1526, lng: 125.6591, specialties: ["vegetables", "seafood", "meat", "dry goods"], hours: "5:30 AM - 8:00 PM", phone: "(082) 285-6789" },
+      { name: "Buhangin Public Market", lat: 7.1102, lng: 125.6114, specialties: ["vegetables", "fruits", "seafood"], hours: "5:00 AM - 7:30 PM", phone: "(082) 276-5432" },
+      { name: "Sasa Public Market", lat: 7.1348, lng: 125.6617, specialties: ["vegetables", "fruits", "wholesale"], hours: "4:30 AM - 8:00 PM", phone: "(082) 333-2468" },
+      { name: "Roxas Avenue Night Market", lat: 7.0720, lng: 125.6123, specialties: ["street food", "fruits", "seafood", "grilled"], hours: "6:00 PM - 2:00 AM", phone: "(082) 222-1234" }
     ];
     
     let nearbyMarkets = [];

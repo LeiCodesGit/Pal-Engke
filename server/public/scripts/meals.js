@@ -1,3 +1,54 @@
+// Load chat history on page load
+window.addEventListener('DOMContentLoaded', () => {
+  loadChatHistory();
+});
+
+function loadChatHistory() {
+  const chatBox = document.getElementById("chatBox");
+  const savedMessages = localStorage.getItem('mealsChatHistory');
+  
+  if (savedMessages) {
+    try {
+      const messages = JSON.parse(savedMessages);
+      messages.forEach(msg => {
+        const msgDiv = document.createElement("div");
+        msgDiv.classList.add(msg.type);
+        if (msg.isHTML) {
+          msgDiv.innerHTML = msg.content;
+        } else {
+          msgDiv.textContent = msg.content;
+        }
+        chatBox.appendChild(msgDiv);
+      });
+      chatBox.scrollTop = chatBox.scrollHeight;
+    } catch (e) {
+      console.error("Error loading chat history:", e);
+    }
+  }
+}
+
+function saveChatHistory() {
+  const chatBox = document.getElementById("chatBox");
+  const messages = [];
+  
+  chatBox.querySelectorAll('.user-message, .bot-message').forEach(msg => {
+    // Skip the initial welcome message
+    if (msg.textContent.includes("Hello! Tell me what ingredients")) return;
+    
+    messages.push({
+      type: msg.classList.contains('user-message') ? 'user-message' : 'bot-message',
+      content: msg.innerHTML,
+      isHTML: true
+    });
+  });
+  
+  localStorage.setItem('mealsChatHistory', JSON.stringify(messages));
+}
+
+function clearChatHistory() {
+  localStorage.removeItem('mealsChatHistory');
+}
+
 document.getElementById("mealForm").addEventListener("submit", async (e) => {
   e.preventDefault();
 
@@ -79,6 +130,9 @@ document.getElementById("mealForm").addEventListener("submit", async (e) => {
 
   chatBox.scrollTop = chatBox.scrollHeight;
   document.getElementById("ingredients").value = "";
+  
+  // Save chat history after each message
+  saveChatHistory();
 });
 
 function viewOnMap(lat, lng, marketName) {

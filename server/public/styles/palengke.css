@@ -184,6 +184,15 @@
   }
 }
 
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
 /* FILTER BUTTONS */
 .filters {
   display: flex;

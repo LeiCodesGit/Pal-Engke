@@ -34,6 +34,7 @@ body {
   margin-bottom: 1.5rem;
   padding-bottom: 1.5rem;
   border-bottom: 2px solid var(--border-color);
+  position: relative;
 }
 
 .logo-header img {
@@ -42,6 +43,28 @@ body {
   margin-bottom: 1rem;
   border-radius: var(--border-radius);
   box-shadow: var(--shadow-sm);
+}
+
+.btn-clear-chat {
+  position: absolute;
+  top: 0;
+  right: 0;
+  background: var(--accent-red);
+  color: white;
+  border: none;
+  border-radius: var(--border-radius);
+  padding: 0.5rem 1rem;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  font-weight: 600;
+  box-shadow: var(--shadow-sm);
+}
+
+.btn-clear-chat:hover {
+  background: #c0392b;
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
 }
 
 h1 {

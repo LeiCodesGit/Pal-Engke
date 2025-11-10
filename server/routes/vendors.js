@@ -6,15 +6,15 @@ const router = express.Router();
 
 // Real Davao City public markets (same as in airoutes.js)
 const realPublicMarkets = [
-  { name: "Bankerohan Public Market", lat: 7.0731, lng: 125.6128, address: "Bankerohan, Davao City", category: "Public Market", hours: "5:00 AM - 8:00 PM", phone: "(082) 221-1234", rating: "4.5", specialties: ["Fresh produce", "Seafood", "Meat", "General goods"] },
-  { name: "Agdao Public Market", lat: 7.0897, lng: 125.6289, address: "Agdao, Davao City", category: "Public Market", hours: "6:00 AM - 7:00 PM", phone: "(082) 234-5678", rating: "4.3", specialties: ["Vegetables", "Fruits", "Poultry", "Dry goods"] },
-  { name: "Toril Public Market", lat: 7.0042, lng: 125.5147, address: "Toril, Davao City", category: "Public Market", hours: "5:30 AM - 7:30 PM", phone: "(082) 291-2345", rating: "4.2", specialties: ["Fresh fish", "Vegetables", "Local products"] },
-  { name: "Matina Town Square", lat: 7.0608, lng: 125.5908, address: "Matina, Davao City", category: "Public Market", hours: "6:00 AM - 9:00 PM", phone: "(082) 297-3456", rating: "4.4", specialties: ["Groceries", "Fresh produce", "Cooked food"] },
-  { name: "Magallanes Public Market", lat: 7.0431, lng: 125.5789, address: "Magallanes, Davao City", category: "Public Market", hours: "5:00 AM - 7:00 PM", phone: "(082) 296-4567", rating: "4.1", specialties: ["Vegetables", "Fruits", "Meat products"] },
-  { name: "Monteverde Public Market", lat: 7.0689, lng: 125.6234, address: "Monteverde, Davao City", category: "Public Market", hours: "6:00 AM - 8:00 PM", phone: "(082) 233-5678", rating: "4.0", specialties: ["Fresh produce", "Seafood", "General goods"] },
-  { name: "Buhangin Public Market", lat: 7.1092, lng: 125.6523, address: "Buhangin, Davao City", category: "Public Market", hours: "5:30 AM - 7:30 PM", phone: "(082) 241-6789", rating: "4.2", specialties: ["Vegetables", "Fish", "Poultry"] },
-  { name: "Tigatto Public Market", lat: 7.1478, lng: 125.6089, address: "Tigatto, Davao City", category: "Public Market", hours: "6:00 AM - 7:00 PM", phone: "(082) 285-7890", rating: "4.0", specialties: ["Fresh produce", "Meat", "Dry goods"] },
-  { name: "Roxas Night Market", lat: 7.0644, lng: 125.6075, address: "Roxas Avenue, Davao City", category: "Night Market", hours: "6:00 PM - 2:00 AM", phone: "(082) 222-8901", rating: "4.6", specialties: ["Street food", "Grilled items", "Local delicacies", "Durian"] }
+  { name: "Bankerohan Public Market", lat: 7.0688, lng: 125.6009, address: "Bankerohan, Davao City", category: "Public Market", hours: "5:00 AM - 8:00 PM", phone: "(082) 221-1234", rating: "4.5", specialties: ["Fresh produce", "Seafood", "Meat", "General goods"] },
+  { name: "Agdao Public Market", lat: 7.0821, lng: 125.6232, address: "Agdao, Davao City", category: "Public Market", hours: "6:00 AM - 7:00 PM", phone: "(082) 234-5678", rating: "4.3", specialties: ["Vegetables", "Fruits", "Poultry", "Dry goods"] },
+  { name: "Toril Public Market", lat: 7.0183, lng: 125.4959, address: "Toril, Davao City", category: "Public Market", hours: "5:30 AM - 7:30 PM", phone: "(082) 291-2345", rating: "4.2", specialties: ["Fresh fish", "Vegetables", "Local products"] },
+  { name: "Matina Crossing Public Market", lat: 7.0584, lng: 125.5698, address: "Matina, Davao City", category: "Public Market", hours: "6:00 AM - 9:00 PM", phone: "(082) 297-3456", rating: "4.4", specialties: ["Groceries", "Fresh produce", "Cooked food"] },
+  { name: "Puan Night Market", lat: 7.0512, lng: 125.5397, address: "Puan, Davao City", category: "Night Market", hours: "5:00 AM - 7:00 PM", phone: "(082) 296-4567", rating: "4.1", specialties: ["Vegetables", "Fruits", "Meat products"] },
+  { name: "Panacan Public Market", lat: 7.1526, lng: 125.6591, address: "Panacan, Davao City", category: "Public Market", hours: "6:00 AM - 8:00 PM", phone: "(082) 233-5678", rating: "4.0", specialties: ["Fresh produce", "Seafood", "General goods"] },
+  { name: "Buhangin Public Market", lat: 7.1102, lng: 125.6114, address: "Buhangin, Davao City", category: "Public Market", hours: "5:30 AM - 7:30 PM", phone: "(082) 241-6789", rating: "4.2", specialties: ["Vegetables", "Fish", "Poultry"] },
+  { name: "Sasa Public Market", lat: 7.1348, lng: 125.6617, address: "Sasa, Davao City", category: "Public Market", hours: "6:00 AM - 7:00 PM", phone: "(082) 285-7890", rating: "4.0", specialties: ["Fresh produce", "Meat", "Dry goods"] },
+  { name: "Roxas Night Market", lat: 7.0720, lng: 125.6123, address: "Roxas Avenue, Davao City", category: "Night Market", hours: "6:00 PM - 2:00 AM", phone: "(082) 222-8901", rating: "4.6", specialties: ["Street food", "Grilled items", "Local delicacies", "Durian"] }
 ];
 
 // Helper function to calculate distance

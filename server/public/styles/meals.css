@@ -10,6 +10,7 @@ body {
   align-items: flex-start; 
   padding: 2.5rem 1rem calc(100px + 2vh); 
   overflow-x: hidden;
+  width: 100%;
 }
 
 /* Main Chat Container */
@@ -24,6 +25,7 @@ body {
   flex-direction: column;
   margin-top: 1rem;
   animation: fadeIn 0.4s ease;
+  overflow-x: hidden;
 }
 
 /* Header / Logo */
@@ -223,11 +225,14 @@ h1 {
   .meal-container {
     padding: 1.5rem;
     margin-top: 0.5rem;
+    width: 95%;
+    max-width: 100%;
   }
 
   .chat-box {
     height: 350px;
     padding: 1.25rem;
+    width: 100%;
   }
 
   h1 {
@@ -238,20 +243,27 @@ h1 {
     width: 70px;
     height: 70px;
   }
+  
+  .input-area {
+    flex-wrap: nowrap;
+  }
 }
 
 @media (max-width: 480px) {
   body {
-    padding: 1.5rem 0.75rem calc(100px + 2vh);
+    padding: 1.5rem 0.5rem calc(100px + 2vh);
   }
 
   .meal-container {
-    padding: 1.25rem;
+    padding: 1rem;
+    width: 100%;
+    max-width: 100%;
   }
 
   .chat-box {
     height: 300px;
     padding: 1rem;
+    width: 100%;
   }
 
   .bot-message,

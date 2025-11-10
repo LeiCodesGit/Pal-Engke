@@ -41,6 +41,12 @@
   box-sizing: border-box;
 }
 
+html {
+  overflow-x: hidden;
+  width: 100%;
+  height: 100%;
+}
+
 body {
   font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
   color: var(--text-dark);
@@ -48,6 +54,10 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   line-height: 1.6;
+  overflow-x: hidden;
+  width: 100%;
+  min-height: 100vh;
+  position: relative;
 }
 
 /* ========= TYPOGRAPHY ========= */
@@ -173,6 +183,7 @@ input[type="password"], input[type="number"], textarea, select {
   max-width: 1200px;
   margin: 0 auto;
   padding: 0 1.5rem;
+  width: 100%;
 }
 
 .text-center {
@@ -181,6 +192,14 @@ input[type="password"], input[type="number"], textarea, select {
 
 .text-muted {
   color: var(--text-muted);
+}
+
+.w-100 {
+  width: 100%;
+}
+
+.overflow-hidden {
+  overflow: hidden;
 }
 
 .mt-1 { margin-top: 0.5rem; }
@@ -252,10 +271,28 @@ input[type="password"], input[type="number"], textarea, select {
   .container {
     padding: 0 1rem;
   }
+  
+  .btn-primary, .btn-secondary, .btn-outline {
+    padding: 0.65rem 1.25rem;
+    font-size: 0.95rem;
+  }
 }
 
 @media (max-width: 480px) {
   h1 { font-size: 1.5rem; }
   h2 { font-size: 1.2rem; }
   h3 { font-size: 1.05rem; }
+  
+  .container {
+    padding: 0 0.75rem;
+  }
+  
+  .btn-primary, .btn-secondary, .btn-outline {
+    padding: 0.6rem 1rem;
+    font-size: 0.9rem;
+  }
+  
+  .card {
+    padding: 1rem;
+  }
 }

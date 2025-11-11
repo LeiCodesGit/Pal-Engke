@@ -1,3 +1,4 @@
+// public/scripts/home.js
 document.addEventListener("DOMContentLoaded", () => {
   // Update body padding based on bottom nav (if exists) to avoid overlap
   function adjustForNav() {
@@ -11,7 +12,7 @@ document.addEventListener("DOMContentLoaded", () => {
   }
   adjustForNav();
   window.addEventListener("resize", adjustForNav);
- 
+
   // Greeting (time aware)
   const greetingHeader = document.querySelector(".greeting-text h1");
   const name = greetingHeader ? greetingHeader.textContent.replace(/Good (Morning|Afternoon|Evening),?\s*/i, "").replace("!", "").trim() : null;
@@ -20,7 +21,7 @@ document.addEventListener("DOMContentLoaded", () => {
   if (hour < 12) greet = "Good Morning";
   else if (hour < 18) greet = "Good Afternoon";
   if (greetingHeader) greetingHeader.textContent = `${greet}, ${name || (window.user && window.user.firstName) || "Guest"}!`;
- 
+
   // Modal utilities
   function openModal(modal) {
     modal.style.display = "block";
@@ -33,7 +34,7 @@ document.addEventListener("DOMContentLoaded", () => {
     modal.style.display = "none";
     modal.setAttribute("aria-hidden", "true");
   }
- 
+
   // Close buttons (delegated)
   document.addEventListener("click", (e) => {
     if (e.target.matches(".close-btn")) {
@@ -41,14 +42,14 @@ document.addEventListener("DOMContentLoaded", () => {
       if (modal) closeModal(modal);
     }
   });
- 
+
   // Close when clicking backdrop
   document.addEventListener("click", (e) => {
     if (e.target.classList && e.target.classList.contains("modal")) {
       closeModal(e.target);
     }
   });
- 
+
   // ===== Budget logic (database-backed with weekly reset) =====
   const budgetCard = document.getElementById("budgetCard");
   const budgetModal = document.getElementById("budgetModal");
@@ -58,32 +59,32 @@ document.addEventListener("DOMContentLoaded", () => {
   const budgetValueEl = document.getElementById("budgetValue");
   const remainingValueEl = document.getElementById("remainingValue");
   const savedTextEl = document.getElementById("savedText");
- 
+
   // Load budget from database
   async function loadBudget() {
     if (!window.currentUser || !window.currentUser.id) {
       console.warn("No user logged in");
       return;
     }
- 
+
     try {
       const response = await fetch(`/api/budget/current/${window.currentUser.id}`);
       if (!response.ok) {
         throw new Error(`Failed to load budget: ${response.statusText}`);
       }
- 
+
       const data = await response.json();
       if (data.success && data.budget) {
         const { weekly, remaining, savingsGoal } = data.budget;
-       
+        
         // Update UI
         budgetValueEl.textContent = Number(weekly || 0).toLocaleString();
         remainingValueEl.textContent = Number(remaining || 0).toLocaleString();
-       
+        
         // Calculate spent amount (weekly - remaining)
         const spent = (weekly || 0) - (remaining || 0);
         savedTextEl.textContent = spent > 0 ? `₱${Number(spent).toLocaleString()} spent this week` : "";
-       
+        
         // Pre-fill form inputs
         weeklyBudgetInput.value = weekly || 0;
         savingsGoalInput.value = savingsGoal || 0;
@@ -92,30 +93,30 @@ document.addEventListener("DOMContentLoaded", () => {
       console.error("Error loading budget:", error);
     }
   }
- 
+
   // Load budget on page load
   loadBudget();
- 
+
   // Open modal on card click
   budgetCard.addEventListener("click", () => openModal(budgetModal));
- 
+
   // Save budget to database
   budgetForm.addEventListener("submit", async (e) => {
     e.preventDefault();
-   
+    
     if (!window.currentUser || !window.currentUser.id) {
       alert("You must be logged in to set a budget");
       return;
     }
- 
+
     const weekly = Number(weeklyBudgetInput.value || 0);
     const savingsGoal = Number(savingsGoalInput.value || 0);
- 
+
     if (weekly <= 0) {
       alert("Please enter a valid weekly budget amount");
       return;
     }
- 
+
     try {
       const response = await fetch("/api/budget/set", {
         method: "POST",
@@ -126,16 +127,16 @@ document.addEventListener("DOMContentLoaded", () => {
           savingsGoal: savingsGoal
         })
       });
- 
+
       const data = await response.json();
-     
+      
       if (data.success) {
         // Update UI with new values
         budgetValueEl.textContent = weekly.toLocaleString();
         remainingValueEl.textContent = weekly.toLocaleString(); // Reset remaining to full amount
         savedTextEl.textContent = ""; // Clear spent text on new budget
         closeModal(budgetModal);
-       
+        
         // Show success message
         const successMsg = document.createElement("div");
         successMsg.className = "alert alert-success";
@@ -151,25 +152,24 @@ document.addEventListener("DOMContentLoaded", () => {
       alert("An error occurred while saving your budget");
     }
   });
- 
+
   // ===== DECLARE MODAL VARIABLES FIRST =====
   const mealModal = document.getElementById("mealModal");
-  const mealImg = document.getElementById("mealImg");
   const mealTitle = document.getElementById("mealTitle");
   const mealDesc = document.getElementById("mealDesc");
   const mealIngredients = document.getElementById("mealIngredients");
   const mealSteps = document.getElementById("mealSteps");
   const mealCost = document.getElementById("mealCost");
- 
+
   // ===== LOAD AI SUGGESTIONS FROM MEALS PAGE =====
   function loadAiSuggestions() {
     const aiMeals = localStorage.getItem('aiSuggestedMeals');
     const aiMarkets = localStorage.getItem('aiRecommendedMarkets');
- 
+
     console.log('=== LOADING AI SUGGESTIONS ===');
     console.log('Raw aiMeals from localStorage:', aiMeals);
     console.log('Raw aiMarkets from localStorage:', aiMarkets);
- 
+
     // Load AI suggested meals into "Today's Meal Ideas" section
     if (aiMeals) {
       try {
@@ -178,20 +178,20 @@ document.addEventListener("DOMContentLoaded", () => {
         const aiSection = document.getElementById('aiSuggestedMeals');
         const clearBtn = document.getElementById('clearMealsBtn');
         const noMealsText = document.getElementById('noMealsText');
-       
+        
         console.log('Parsed meals:', meals); // Debug
-       
+        
         if (meals.length > 0 && container) {
           container.innerHTML = '';
-         
+          
           // Show the AI section
           if (aiSection) aiSection.style.display = 'block';
-         
+          
           // Show clear button
           if (clearBtn) clearBtn.style.display = 'flex';
           // Hide no meals text
           if (noMealsText) noMealsText.style.display = 'none';
-         
+          
           meals.forEach(meal => {
             const mealCard = document.createElement('div');
             mealCard.className = 'ai-meal-card';
@@ -209,9 +209,9 @@ document.addEventListener("DOMContentLoaded", () => {
             `;
             container.appendChild(mealCard);
           });
- 
+
           if (window.lucide && lucide.createIcons) lucide.createIcons();
- 
+
           // Add remove button handlers
           document.querySelectorAll('.remove-meal-btn').forEach(btn => {
             btn.addEventListener('click', (e) => {
@@ -219,7 +219,7 @@ document.addEventListener("DOMContentLoaded", () => {
               removeMeal(btn.dataset.mealId);
             });
           });
- 
+
           // Add view details handlers
           document.querySelectorAll('.view-meal-details-btn').forEach(btn => {
             btn.addEventListener('click', () => {
@@ -251,18 +251,18 @@ document.addEventListener("DOMContentLoaded", () => {
         aiSection.style.display = 'block'; // Show section to display the message
       }
     }
- 
+
     // Load AI recommended markets
     if (aiMarkets) {
       try {
         const markets = JSON.parse(aiMarkets);
         const container = document.getElementById('nearbyMarketsContainer');
-       
+        
         console.log('Parsed markets:', markets); // Debug
-       
+        
         if (markets.length > 0 && container) {
           container.innerHTML = '';
-         
+          
           markets.forEach(market => {
             const marketCard = document.createElement('div');
             marketCard.className = 'market-card';
@@ -282,17 +282,17 @@ document.addEventListener("DOMContentLoaded", () => {
             `;
             container.appendChild(marketCard);
           });
- 
+
           if (window.lucide && lucide.createIcons) lucide.createIcons();
- 
+
           // Add map button handlers
           document.querySelectorAll('.view-on-map-btn-home').forEach(btn => {
             btn.addEventListener('click', (e) => {
               const card = e.target.closest('.market-card');
-              sessionStorage.setItem('targetMarket', JSON.stringify({
-                lat: card.dataset.lat,
-                lng: card.dataset.lng,
-                name: card.dataset.market
+              sessionStorage.setItem('targetMarket', JSON.stringify({ 
+                lat: card.dataset.lat, 
+                lng: card.dataset.lng, 
+                name: card.dataset.market 
               }));
               window.location.href = '/palengke';
             });
@@ -303,14 +303,14 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     }
   }
- 
+
   function removeMeal(mealId) {
     const aiMeals = localStorage.getItem('aiSuggestedMeals');
     if (aiMeals) {
       try {
         let meals = JSON.parse(aiMeals);
         meals = meals.filter(m => m.id !== mealId);
-       
+        
         if (meals.length > 0) {
           localStorage.setItem('aiSuggestedMeals', JSON.stringify(meals));
         } else {
@@ -318,20 +318,19 @@ document.addEventListener("DOMContentLoaded", () => {
           const clearBtn = document.getElementById('clearMealsBtn');
           if (clearBtn) clearBtn.style.display = 'none';
         }
-       
+        
         loadAiSuggestions();
       } catch (error) {
         console.error('Error removing meal:', error);
       }
     }
   }
- 
+
   function showMealDetails(meal) {
-    mealImg.src = meal.image || '/images/default-meal.jpg';
     mealTitle.textContent = meal.name;
     mealDesc.textContent = meal.description || '';
     mealCost.textContent = meal.cost || '';
- 
+
     mealIngredients.innerHTML = '';
     if (meal.ingredients && meal.ingredients.length > 0) {
       meal.ingredients.forEach(i => {
@@ -340,7 +339,7 @@ document.addEventListener("DOMContentLoaded", () => {
         mealIngredients.appendChild(li);
       });
     }
- 
+
     mealSteps.innerHTML = '';
     if (meal.steps && meal.steps.length > 0) {
       meal.steps.forEach(s => {
@@ -349,10 +348,10 @@ document.addEventListener("DOMContentLoaded", () => {
         mealSteps.appendChild(li);
       });
     }
- 
+
     openModal(mealModal);
   }
- 
+
   const clearMealsBtn = document.getElementById('clearMealsBtn');
   if (clearMealsBtn) {
     clearMealsBtn.addEventListener('click', () => {
@@ -360,7 +359,7 @@ document.addEventListener("DOMContentLoaded", () => {
         localStorage.removeItem('aiSuggestedMeals');
         clearMealsBtn.style.display = 'none';
         document.getElementById('suggestedMealsContainer').innerHTML = '';
-       
+        
         // Show no meals text
         const noMealsText = document.getElementById('noMealsText');
         if (noMealsText) {
@@ -369,13 +368,13 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     });
   }
- 
+
   // Load AI suggestions on page load
   loadAiSuggestions();
- 
+
   // ===== Meal modals =====
   // (Variables already declared at top)
- 
+
   document.querySelectorAll(".meal-card").forEach(card => {
     card.addEventListener("click", () => {
       const img = card.dataset.img || "";
@@ -390,12 +389,12 @@ document.addEventListener("DOMContentLoaded", () => {
       try {
         steps = JSON.parse(card.dataset.steps || "[]");
       } catch { steps = []; }
- 
+
       mealImg.src = img;
       mealTitle.textContent = title;
       mealDesc.textContent = desc;
       mealCost.textContent = cost;
- 
+
       // fill ingredients
       mealIngredients.innerHTML = "";
       ingredients.forEach(i => {
@@ -403,7 +402,7 @@ document.addEventListener("DOMContentLoaded", () => {
         li.textContent = i;
         mealIngredients.appendChild(li);
       });
- 
+
       // fill steps
       mealSteps.innerHTML = "";
       steps.forEach(s => {
@@ -411,16 +410,16 @@ document.addEventListener("DOMContentLoaded", () => {
         li.textContent = s;
         mealSteps.appendChild(li);
       });
- 
+
       openModal(mealModal);
     });
- 
+
     // keyboard accessibility (Enter key)
     card.addEventListener("keydown", (e) => {
       if (e.key === "Enter" || e.key === " ") { e.preventDefault(); card.click(); }
     });
   });
- 
+
   // ===== Market modal =====
   const marketCard = document.querySelector(".market-card");
   const marketModal = document.getElementById("marketModal");
@@ -435,7 +434,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const marketReviews = document.getElementById("marketReviews");
   const marketSave = document.getElementById("marketSave");
   const marketShare = document.getElementById("marketShare");
- 
+
   if (marketCard) {
     marketCard.addEventListener("click", () => {
       marketImg.src = marketCard.dataset.img || "";
@@ -444,17 +443,17 @@ document.addEventListener("DOMContentLoaded", () => {
       marketDesc.textContent = marketCard.dataset.desc || "";
       marketLocation.textContent = `Address: ${marketCard.dataset.location || ""}`;
       marketHours.textContent = `Hours: ${marketCard.dataset.hours || ""}`;
- 
+
       // example links (replace with actual)
       const placeName = encodeURIComponent(marketCard.dataset.market || "");
       marketWebsite.href = `https://www.google.com/search?q=${placeName}`;
       marketDirections.href = `https://www.google.com/maps/search/?api=1&query=${placeName}`;
       marketReviews.href = `https://www.google.com/search?q=${placeName}+reviews`;
- 
+
       openModal(marketModal);
     });
   }
- 
+
   // Save & Share placeholders
   if (marketSave) {
     marketSave.addEventListener("click", () => {
@@ -471,14 +470,14 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     });
   }
- 
+
   // Ensure modals are keyboard closeable with Escape
   document.addEventListener("keydown", (e) => {
     if (e.key === "Escape") {
       document.querySelectorAll(".modal").forEach(m => closeModal(m));
     }
   });
- 
+
   // Re-run lucide icons if needed (some SPA setups require this)
   if (window.lucide && lucide.createIcons) lucide.createIcons();
 });

@@ -1,10 +1,11 @@
 import express from "express";
-import Meal from "../models/Meal.js"; // adjust path if needed
+import Meal from "../models/Meal.js";
+import redirectIfNotLoggedIn from "../middlewares/redirectIfNotLoggedIn.js";
 
 const homeRouter = express.Router();
 
 // Home page with dynamic meals for today
-homeRouter.get("/home", async (req, res) => {
+homeRouter.get("/home", redirectIfNotLoggedIn, async (req, res) => {
   const user = req.session?.user || null;
 
   try {
@@ -24,19 +25,18 @@ homeRouter.get("/home", async (req, res) => {
 });
 
 // Meals page 
-homeRouter.get("/meals", (req, res) => {
+homeRouter.get("/meals", redirectIfNotLoggedIn, (req, res) => {
   const user = req.session?.user || null;
   res.render("meals", { user });
 });
 
 // Profile page
-homeRouter.get("/profile", (req, res) => {
-  if (!req.session.user) return res.redirect("/auth/login");
+homeRouter.get("/profile", redirectIfNotLoggedIn, (req, res) => {
   res.render("profile", { user: req.session.user });
 });
 
 // Palengke page
-homeRouter.get("/palengke", (req, res) => {
+homeRouter.get("/palengke", redirectIfNotLoggedIn, (req, res) => {
   const user = req.session?.user || null;
   res.render("palengke", { user });
 });

@@ -1,20 +1,18 @@
 import express from "express";
 import upload from "../middlewares/upload.js"; // your multer middleware
 import User from "../models/User.js";
+import redirectIfNotLoggedIn from "../middlewares/redirectIfNotLoggedIn.js";
 
 const profileRouter = express.Router();
 
 // View profile
-profileRouter.get("/", async (req, res) => {
-    const user = req.session?.user || req.user;
-    if (!user) return res.redirect("/auth/login");
-
-    res.render("profile", { user });
+profileRouter.get("/", redirectIfNotLoggedIn, async (req, res) => {
+    res.render("profile", { user: req.session.user });
 });
 
 
 // Edit profile route
-profileRouter.post("/edit", upload.single("profile_picture"), async (req, res) => {
+profileRouter.post("/edit", redirectIfNotLoggedIn, upload.single("profile_picture"), async (req, res) => {
     try {
         const userId = req.session?.user?._id || req.session?.user?.id;
         if (!userId) return res.status(401).json({ success: false, message: "Not authenticated" });

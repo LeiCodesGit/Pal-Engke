@@ -1,11 +1,12 @@
 import express from "express";
 import BudgetHistory from "../models/BudgetHistory.js";
 import User from "../models/User.js";
+import redirectIfNotLoggedIn from "../middlewares/redirectIfNotLoggedIn.js";
 
 const router = express.Router();
 
 // Set/Update weekly budget
-router.post("/set", async (req, res) => {
+router.post("/set", redirectIfNotLoggedIn, async (req, res) => {
   try {
     const { userId, weeklyBudget, savingsGoal } = req.body;
 
@@ -59,7 +60,7 @@ router.post("/set", async (req, res) => {
 });
 
 // Update remaining budget (when user spends money)
-router.post("/spend", async (req, res) => {
+router.post("/spend", redirectIfNotLoggedIn, async (req, res) => {
   try {
     const { userId, amount } = req.body;
 
@@ -82,7 +83,7 @@ router.post("/spend", async (req, res) => {
 });
 
 // Get current budget
-router.get("/current/:userId", async (req, res) => {
+router.get("/current/:userId", redirectIfNotLoggedIn, async (req, res) => {
   try {
     const user = await User.findById(req.params.userId);
     if (!user) {
@@ -120,7 +121,7 @@ router.get("/current/:userId", async (req, res) => {
 });
 
 // Update current budget
-router.post("/update", async (req, res) => {
+router.post("/update", redirectIfNotLoggedIn, async (req, res) => {
   const { userId, amount } = req.body;
 
   const user = await User.findById(userId);

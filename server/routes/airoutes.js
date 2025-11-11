@@ -2,6 +2,7 @@ import express from "express";
 import OpenAI from "openai";
 import dotenv from "dotenv";
 import Vendor from "../models/Vendor.js";
+import redirectIfNotLoggedIn from "../middlewares/redirectIfNotLoggedIn.js";
 
 dotenv.config();
 
@@ -9,6 +10,9 @@ const router = express.Router();
 const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
 });
+
+//protect all the routes
+router.use(redirectIfNotLoggedIn);
 
 // Helper: Calculate distance between two coordinates (Haversine formula)
 function calculateDistance(lat1, lon1, lat2, lon2) {

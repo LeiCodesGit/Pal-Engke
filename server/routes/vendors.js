@@ -1,6 +1,7 @@
 // server/routes/vendors.js
 import express from "express";
 import Vendor from "../models/Vendor.js";
+import redirectIfNotLoggedIn from "../middlewares/redirectIfNotLoggedIn.js";
 
 const router = express.Router();
 
@@ -32,6 +33,9 @@ function calculateDistance(lat1, lng1, lat2, lng2) {
 
   return R * c;
 }
+
+//protected routes can be added here using redirectIfNotLoggedIn middleware
+router.use(redirectIfNotLoggedIn);
 
 // GET /api/vendors/search?query=...&lat=...&lng=...
 router.get("/search", async (req, res) => {

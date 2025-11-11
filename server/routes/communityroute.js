@@ -3,6 +3,7 @@ import express from "express";
 import multer from "multer";
 import Recipe from "../models/Recipe.js";
 import User from "../models/User.js";
+import redirectIfNotLoggedIn from "../middlewares/redirectIfNotLoggedIn.js";
 
 const communityRouter = express.Router();
 
@@ -13,15 +14,9 @@ const upload = multer({
   limits: { fileSize: 5 * 1024 * 1024 }, // 5MB max
 });
 
-// ✅ Middleware: require login
-function ensureLoggedIn(req, res, next) {
-  if (!req.session || !req.session.user)
-    return res.status(401).json({ message: "Login required" });
-  next();
-}
 
 // ✅ Feed page
-communityRouter.get("/", async (req, res) => {
+communityRouter.get("/", redirectIfNotLoggedIn, async (req, res) => {
   try {
     const recipes = await Recipe.find()
       .populate("user", "firstName lastName profile_picture")
@@ -35,7 +30,7 @@ communityRouter.get("/", async (req, res) => {
 });
 
 // ✅ Create new recipe (Base64)
-communityRouter.post("/add", ensureLoggedIn, upload.single("image"), async (req, res) => {
+communityRouter.post("/add", redirectIfNotLoggedIn, upload.single("image"), async (req, res) => {
   try {
     const { description, text } = req.body;
     const content = (description || text || "").trim();
@@ -67,7 +62,7 @@ communityRouter.post("/add", ensureLoggedIn, upload.single("image"), async (req,
 });
 
 // ✅ Edit recipe (Base64)
-communityRouter.put("/edit/:id", ensureLoggedIn, upload.single("image"), async (req, res) => {
+communityRouter.put("/edit/:id", redirectIfNotLoggedIn, upload.single("image"), async (req, res) => {
   try {
     const recipe = await Recipe.findById(req.params.id);
     if (!recipe) return res.status(404).json({ message: "Not found" });
@@ -101,7 +96,7 @@ communityRouter.put("/edit/:id", ensureLoggedIn, upload.single("image"), async (
 });
 
 // ✅ Delete recipe (no local files anymore)
-communityRouter.delete("/delete/:id", ensureLoggedIn, async (req, res) => {
+communityRouter.delete("/delete/:id", redirectIfNotLoggedIn, async (req, res) => {
   try {
     const recipe = await Recipe.findById(req.params.id);
     if (!recipe) return res.status(404).json({ message: "Not found" });
@@ -119,7 +114,7 @@ communityRouter.delete("/delete/:id", ensureLoggedIn, async (req, res) => {
 });
 
 // ✅ Like/unlike
-communityRouter.post("/like/:id", ensureLoggedIn, async (req, res) => {
+communityRouter.post("/like/:id", redirectIfNotLoggedIn, async (req, res) => {
   try {
     const recipe = await Recipe.findById(req.params.id);
     if (!recipe) return res.status(404).json({ message: "Not found" });

@@ -1,13 +1,29 @@
 import express from "express";
+import Meal from "../models/Meal.js"; // adjust path if needed
+
 const homeRouter = express.Router();
 
-// Home page
-homeRouter.get("/home", (req, res) => {
+// Home page with dynamic meals for today
+homeRouter.get("/home", async (req, res) => {
   const user = req.session?.user || null;
-  res.render("home", { user });
+
+  try {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0); // start of today
+
+    // Fetch meals suggested for today
+    const meals = await Meal.find({
+      suggestedFor: today
+    });
+
+    res.render("home", { user, meals });
+  } catch (err) {
+    console.error("Failed to fetch today's meals:", err);
+    res.render("home", { user, meals: [] });
+  }
 });
 
-// Meals page
+// Meals page 
 homeRouter.get("/meals", (req, res) => {
   const user = req.session?.user || null;
   res.render("meals", { user });
@@ -15,9 +31,7 @@ homeRouter.get("/meals", (req, res) => {
 
 // Profile page
 homeRouter.get("/profile", (req, res) => {
-  if (!req.session.user) {
-    return res.redirect("/auth/login");
-  }
+  if (!req.session.user) return res.redirect("/auth/login");
   res.render("profile", { user: req.session.user });
 });
 
@@ -26,11 +40,5 @@ homeRouter.get("/palengke", (req, res) => {
   const user = req.session?.user || null;
   res.render("palengke", { user });
 });
-
-// Community page
-//homeRouter.get("/community", (req, res) => {
- //const user = req.session?.user || null;
-  //res.render("community", { user });
-//});
 
 export default homeRouter;

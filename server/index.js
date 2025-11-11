@@ -12,6 +12,8 @@ import communityRouter from "./routes/communityroute.js";
 import aiRouter from "./routes/airoutes.js";  
 import profileRouter from "./routes/profileroutes.js";
 import vendorsRouter from "./routes/vendors.js";
+import budgetRouter from "./routes/budgetroutes.js";
+import "./cron/resetBudget.js";
 
 dotenv.config();
 
@@ -56,8 +58,8 @@ app.use("/", homeRouter);
 app.use("/community", communityRouter);
 app.use("/api", aiRouter);  
 app.use("/profile", profileRouter);
-app.use("/api", aiRouter);
 app.use("/api/vendors", vendorsRouter); 
+app.use("/api/budget", budgetRouter); 
 
 
 // Default route

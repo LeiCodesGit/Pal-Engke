@@ -93,7 +93,86 @@ document.getElementById("mealForm").addEventListener("submit", async (e) => {
     if (response.ok && data.suggestion) {
       botMsg.innerHTML = data.suggestion.replace(/\n/g, "<br>");
       
+      // Extract meal name from AI suggestion and save to localStorage for homepage
+      const mealNameMatch = data.suggestion.match(/You can make\s+\*\*(.+?)\*\*/i) || 
+                           data.suggestion.match(/You can make\s+([^!]+?)(?:\s+with|\s+using|!)/i) ||
+                           data.suggestion.match(/\*\*(.+?)\*\*/);
+      console.log('Meal name match:', mealNameMatch); // Debug
+      
+      if (mealNameMatch) {
+        let mealName = mealNameMatch[1].trim();
+        // Remove any trailing text like "with the following ingredients"
+        mealName = mealName.replace(/\s+with\s+(the\s+)?(following\s+)?ingredients.*$/i, '').trim();
+        console.log('Extracted meal name:', mealName); // Debug
+        
+        // Parse ingredients from suggestion - look for bullet points or numbered lists
+        let ingredients = [];
+        const lines = data.suggestion.split('\n');
+        let inIngredientsSection = false;
+        
+        for (let line of lines) {
+          line = line.trim();
+          // Check if we're entering ingredients section (though the AI response doesn't typically have this)
+          // Instead, we'll use the user's input ingredients
+          if (line.match(/^[-•*]\s+/)) {
+            ingredients.push(line.replace(/^[-•*]\s+/, '').trim());
+          }
+        }
+        
+        // If no ingredients found in AI response, use a placeholder
+        if (ingredients.length === 0) {
+          ingredients = ['See description for ingredients'];
+        }
+
+        // Parse steps from suggestion - look for "Step X:" pattern
+        let steps = [];
+        const stepMatches = data.suggestion.matchAll(/[-•]\s*Step\s+\d+:\s*(.+?)(?=[-•]\s*Step|\n\n|$)/gis);
+        for (let match of stepMatches) {
+          const step = match[1].trim();
+          if (step.length > 5) {
+            steps.push(step);
+          }
+        }
+        
+        // If no steps found, try alternative pattern
+        if (steps.length === 0) {
+          const alternativeSteps = data.suggestion.match(/(?:Step\s+\d+:|[-•]\s*)(Add|Start|In|Heat|Cook|Pour|Season|Serve|Mix|Combine|Sauté|Simmer|Boil).+?(?=(?:Step\s+\d+:|[-•]|$))/gis);
+          if (alternativeSteps) {
+            steps = alternativeSteps.map(s => s.replace(/^[-•]\s*Step\s+\d+:\s*/i, '').trim()).filter(s => s.length > 10);
+          }
+        }
+
+        // Save meal to localStorage
+        const aiMeals = JSON.parse(localStorage.getItem('aiSuggestedMeals') || '[]');
+        const newMeal = {
+          id: Date.now().toString(),
+          name: mealName,
+          description: data.suggestion,
+          ingredients: ingredients,
+          steps: steps.length > 0 ? steps : ['Follow the recipe instructions in the description'],
+          cost: 'Varies',
+          image: '/images/default-meal.jpg',
+          timestamp: new Date().toISOString()
+        };
+        
+        console.log('=== SAVING NEW MEAL ===');
+        console.log('Extracted meal name:', mealName);
+        console.log('New meal object:', newMeal);
+        
+        // Add to beginning and limit to 5 meals
+        aiMeals.unshift(newMeal);
+        if (aiMeals.length > 5) aiMeals.length = 5;
+        
+        localStorage.setItem('aiSuggestedMeals', JSON.stringify(aiMeals));
+        console.log('Saved to localStorage. Total meals:', aiMeals.length);
+        console.log('localStorage content:', localStorage.getItem('aiSuggestedMeals'));
+      }
+      
+      // Save recommended markets to localStorage
       if (data.markets && data.markets.length > 0) {
+        localStorage.setItem('aiRecommendedMarkets', JSON.stringify(data.markets));
+        console.log('Saved markets to localStorage:', data.markets.length); // Debug
+        
         const marketsDiv = document.createElement("div");
         marketsDiv.classList.add("bot-message", "markets-list");
         let html = '<div style="margin-top: 10px; padding: 10px; background: #f8f9fa; border-radius: 8px;">';
@@ -103,12 +182,12 @@ document.getElementById("mealForm").addEventListener("submit", async (e) => {
           html += '<div style="padding: 8px; margin: 5px 0; background: white; border-radius: 5px; border-left: 3px solid #38a34a;">';
           html += '<strong>' + market.name + '</strong><br>';
           html += '<small style="color: #666;">';
-          html += '📍 ' + market.address + '<br>';
+          html += '📍 ' + (market.address || market.distance) + '<br>';
           if (market.distance) {
-            html += '📏 ' + (market.distance / 1000).toFixed(2) + ' km away<br>';
+            html += '📏 ' + market.distance + '<br>';
           }
           html += '⏰ ' + market.hours + '<br>';
-          html += '📦 ' + (market.specialties ? market.specialties.join(', ') : 'General goods');
+          html += '📦 ' + (market.matchingItems || market.specialties || 'General goods');
           html += '</small><br>';
           html += '<button class="btn-view-map" onclick="viewOnMap(' + market.lat + ', ' + market.lng + ', \'' + market.name.replace(/'/g, "\\'") + '\')">🗺️ View on Map</button>';
           html += '</div>';

@@ -21,14 +21,6 @@
       <% } %>
     </header>
 
-    <section class="filters d-flex flex-wrap justify-content-center">
-      <button class="btn btn-filter active">Trending</button>
-      <button class="btn btn-filter">Following</button>
-      <button class="btn btn-filter">Quick Meals</button>
-      <button class="btn btn-filter">Budget-Friendly</button>
-      <button class="btn btn-filter">Traditional</button>
-    </section>
-
     <% recipes.forEach(r => { %>
       <section class="recipe-card shadow-sm" data-id="<%= r._id %>">
         <div class="d-flex align-items-center mb-2">

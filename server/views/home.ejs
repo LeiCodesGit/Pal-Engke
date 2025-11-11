@@ -7,11 +7,11 @@
   <link rel="icon" type="image/png" href="/images/robot-logo.ico" />
   <link rel="stylesheet" href="/styles/global.css" />
   <link rel="stylesheet" href="/styles/home.css" />
-
+ 
   <!-- Lucide Icons -->
   <script src="https://unpkg.com/lucide@latest"></script>
 </head>
-
+ 
 <body>
   <div class="dashboard-container">
     <!-- Greeting -->
@@ -24,7 +24,7 @@
         <p>Here’s your personalized plan for today</p>
       </div>
     </header>
-
+ 
     <!-- Budget Card -->
     <section class="budget-card" id="budgetCard" aria-label="Weekly budget">
       <div class="budget-header">
@@ -36,7 +36,7 @@
         </div>
       </div>
     </section>
-
+ 
     <!-- Budget Modal -->
     <div id="budgetModal" class="modal" role="dialog" aria-modal="true" aria-hidden="true">
       <div class="modal-content" role="document">
@@ -51,35 +51,20 @@
         </form>
       </div>
     </div>
-
-    <!-- Meals -->
-    <section class="meals">
-      <h2><i data-lucide="utensils-crossed" class="section-icon"></i> Today’s Meal Ideas</h2>
-
-      <% if (meals && meals.length > 0) { %>
-        <% meals.forEach(meal => { %>
-          <div class="meal-card"
-               data-meal="<%= meal.name %>"
-               data-desc="<%= meal.description %>"
-               data-ingredients='<%= JSON.stringify(meal.ingredients) %>'
-               data-steps='<%= JSON.stringify(meal.steps) %>'
-               data-cost="₱<%= meal.cost %> / serving · <%= meal.time %> min"
-               data-img="<%= meal.image %>"
-               tabindex="0"
-               role="button">
-            <img src="<%= meal.image %>" alt="<%= meal.name %>" />
-            <div class="meal-info">
-              <h3><%= meal.name %></h3>
-              <p><%= meal.shortDesc %></p>
-              <small>₱<%= meal.cost %> / serving · <%= meal.time %> min</small>
-            </div>
-          </div>
-        <% }) %>
-      <% } else { %>
-        <p>No meals available for today.</p>
-      <% } %>
+ 
+    <!-- Today's Meal Ideas (AI Suggested from Meals Page) -->
+    <section class="meals" id="aiSuggestedMeals" style="display: none;">
+      <div class="meals-header">
+        <h2><i data-lucide="utensils-crossed" class="section-icon"></i> Today's Meal Ideas</h2>
+        <button id="clearMealsBtn" class="clear-meals-btn" aria-label="Clear suggestions">
+          <i data-lucide="x"></i> Clear AI
+        </button>
+      </div>
+      <div id="suggestedMealsContainer"></div>
+      <p id="noMealsText" class="no-meals-text" style="display: none;">No meals available. Visit the Meals page to get AI suggestions!</p>
     </section>
-
+ 
+ 
     <!-- Meal Modal -->
     <div id="mealModal" class="modal" role="dialog" aria-modal="true" aria-hidden="true">
       <div class="modal-content meal-modal">
@@ -87,40 +72,29 @@
         <img id="mealImg" class="modal-image" alt="Meal Image" />
         <h2 id="mealTitle"></h2>
         <p id="mealDesc" class="muted"></p>
-
+ 
         <div class="ingredients-section">
           <h4><i data-lucide="list"></i> Ingredients</h4>
           <ul id="mealIngredients"></ul>
         </div>
-
+ 
         <div class="steps-section">
           <h4><i data-lucide="chef-hat"></i> Steps</h4>
           <ol id="mealSteps"></ol>
         </div>
-
+ 
         <p id="mealCost" class="meal-cost muted"></p>
       </div>
     </div>
-
-    <!-- Market section stays the same -->
+ 
+    <!-- Nearby Markets (AI Recommended) -->
     <section class="markets">
-      <h2><i data-lucide="map-pin" class="section-icon"></i> Nearby Market</h2>
-
-      <div class="market-card"
-           data-market="Bankerohan Public Market"
-           data-info="⭐ 4.2 · 4,216 Google reviews"
-           data-location="Building No: 2, Barangay, Marfori Street, Poblacion District, Davao City, 8000 Davao del Sur"
-           data-img="https://2.bp.blogspot.com/-SjF9vDY2GgU/UGp69J5-J3I/AAAAAAAAEYA/FDaHsuq6vAI/s1600/DSC08072.JPG"
-           data-hours="Open 24 hours"
-           data-desc="Farmers sell grapefruit & durian at this busy market also popular for simple clothing & street food."
-           tabindex="0"
-           role="button">
-        <h3>Bankerohan Public Market</h3>
-        <p class="muted">⭐ 4.2 rating · Farmers’ market in Davao</p>
-        <p class="muted">Open 24 hours</p>
+      <h2><i data-lucide="map-pin" class="section-icon"></i> Nearby Markets</h2>
+      <div id="nearbyMarketsContainer">
+        <p class="no-markets-text">Visit the Meals page and ask AI for suggestions to see recommended markets here!</p>
       </div>
     </section>
-
+ 
     <!-- Market Modal stays the same -->
     <div id="marketModal" class="modal" role="dialog" aria-modal="true" aria-hidden="true">
       <div class="modal-content">
@@ -131,7 +105,7 @@
         <p id="marketDesc"></p>
         <p id="marketLocation"></p>
         <p id="marketHours"></p>
-
+ 
         <div class="market-buttons">
           <a id="marketWebsite" class="market-btn" href="#" target="_blank" rel="noopener noreferrer"><i data-lucide="globe"></i> Website</a>
           <a id="marketDirections" class="market-btn" href="#" target="_blank" rel="noopener noreferrer"><i data-lucide="navigation"></i> Directions</a>
@@ -142,9 +116,16 @@
       </div>
     </div>
   </div>
-
+ 
   <%- include('partials/navbar', { activePage: 'home' }) %>
-
+ 
+  <script>
+    // Pass user data to client-side JS
+    window.currentUser = {
+      id: '<%= user ? user._id || user.id : "" %>',
+      firstName: '<%= user ? user.firstName : "Guest" %>'
+    };
+  </script>
   <script src="/scripts/home.js"></script>
   <script>lucide.createIcons();</script>
 </body>
